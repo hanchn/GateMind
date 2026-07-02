@@ -1,4 +1,4 @@
-import { Shield, Boxes, SlidersHorizontal, ClipboardCheck, ScrollText, Orbit, PlugZap, FileInput, TableProperties, KeyRound } from "lucide-react";
+import { Shield, Boxes, SlidersHorizontal, ClipboardCheck, ScrollText, Orbit, PlugZap, FileInput, TableProperties, KeyRound, Settings } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
@@ -13,6 +13,7 @@ const navItems = [
   { to: "/connections", label: "数据连接", icon: PlugZap },
   { to: "/connection-requests", label: "应用发布", icon: FileInput },
   { to: "/tables", label: "库表治理", icon: TableProperties },
+  { to: "/settings", label: "公共设置", icon: Settings },
   { to: "/tokens", label: "个人 Token", icon: KeyRound },
 ];
 
