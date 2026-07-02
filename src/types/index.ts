@@ -140,6 +140,17 @@ export interface PersonalToken {
   maskedValue: string;
 }
 
+export interface ApplicationCredential {
+  id: string;
+  name: string;
+  domain: string;
+  owner: string;
+  appId: string;
+  appSecret: string;
+  status: ToolStatus;
+  createdAt: string;
+}
+
 export interface DashboardSummary {
   metrics: DashboardMetric[];
   risks: RiskDistributionItem[];
