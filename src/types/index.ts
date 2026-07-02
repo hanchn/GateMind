@@ -136,6 +136,7 @@ export interface PersonalToken {
   expiresAt: string;
   lastUsedAt: string;
   status: TokenStatus;
+  value: string;
   maskedValue: string;
 }
 

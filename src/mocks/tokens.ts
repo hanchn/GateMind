@@ -8,6 +8,7 @@ export const tokens: PersonalToken[] = [
     expiresAt: "2026-08-01",
     lastUsedAt: "2026-07-02 16:30",
     status: "active",
+    value: "gtm_usr_yuanjing_20260702163000_cli_x91a",
     maskedValue: "gtm_cli_****x91a",
   },
   {
@@ -17,6 +18,7 @@ export const tokens: PersonalToken[] = [
     expiresAt: "2026-07-18",
     lastUsedAt: "2026-07-02 12:04",
     status: "expiring",
+    value: "gtm_usr_yuanjing_20260702120400_bot_q73k",
     maskedValue: "gtm_bot_****q73k",
   },
   {
@@ -26,6 +28,7 @@ export const tokens: PersonalToken[] = [
     expiresAt: "2026-06-28",
     lastUsedAt: "2026-06-27 09:11",
     status: "revoked",
+    value: "gtm_usr_yuanjing_20260627091100_old_r20v",
     maskedValue: "gtm_old_****r20v",
   },
 ];

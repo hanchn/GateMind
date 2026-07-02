@@ -4,12 +4,17 @@ import { Button } from "antd";
 import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { createPersonalToken } from "@/services/tokenService";
+import type { PersonalToken } from "@/types";
 
 function formatDateInput(date: Date) {
   return date.toISOString().slice(0, 10);
 }
 
-export function TokenCreatePanel() {
+interface TokenCreatePanelProps {
+  onCreated?: (token: PersonalToken) => void;
+}
+
+export function TokenCreatePanel({ onCreated }: TokenCreatePanelProps) {
   const [name, setName] = useState("");
   const [startDate, setStartDate] = useState(() => formatDateInput(new Date()));
   const [endDate, setEndDate] = useState(() => {
@@ -20,8 +25,12 @@ export function TokenCreatePanel() {
   const [message, setMessage] = useState("");
 
   return (
-    <SectionCard title="创建个人 Token" action={<HelpTooltip content="Token 不自动续期，到期后立即失效。" />}>
+    <SectionCard action={<HelpTooltip content="Token 不自动续期，到期后立即失效。" />}>
       <div className="space-y-4">
+        <div>
+          <p className="text-sm font-semibold text-ink">新建 Token</p>
+          <p className="mt-1 text-sm text-ink-muted">创建后可在右侧历史列表查看完整值并复制。</p>
+        </div>
         <label className="block text-sm text-ink-muted">
           Token 名称
           <input
@@ -64,12 +73,14 @@ export function TokenCreatePanel() {
               scope: "工具查询、审计查看",
               expiresAt: `${startDate} 至 ${endDate}`,
             });
+            onCreated?.(created);
             setMessage(`已创建 ${created.maskedValue}`);
+            setName("");
           }}
         >
           创建 Token
         </Button>
-        {message && <p className="text-sm text-cyan-200">{message}</p>}
+        {message && <p className="text-sm text-[#1677ff]">{message}</p>}
       </div>
     </SectionCard>
   );
