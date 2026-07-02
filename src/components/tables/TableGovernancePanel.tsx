@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { SectionCard } from "@/components/ui/SectionCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { TableGovernanceItem } from "@/types";
@@ -7,6 +9,14 @@ interface TableGovernancePanelProps {
 }
 
 export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
+  const [draftDescription, setDraftDescription] = useState(item?.description ?? "");
+  const [draftSensitivity, setDraftSensitivity] = useState(item?.sensitivity ?? "中");
+
+  useEffect(() => {
+    setDraftDescription(item?.description ?? "");
+    setDraftSensitivity(item?.sensitivity ?? "中");
+  }, [item]);
+
   if (!item) {
     return (
       <SectionCard title="库表详情" eyebrow="Table Detail">
@@ -41,15 +51,40 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           </div>
         </div>
         <div>
+          <p className="text-xs uppercase tracking-[0.24em]">库表详细描述</p>
+          <textarea
+            value={draftDescription}
+            onChange={(event) => setDraftDescription(event.target.value)}
+            rows={4}
+            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink outline-none"
+          />
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">表的敏感级别</p>
+          <select
+            value={draftSensitivity}
+            onChange={(event) => setDraftSensitivity(event.target.value)}
+            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-ink outline-none"
+          >
+            <option>低</option>
+            <option>中</option>
+            <option>高</option>
+            <option>极高</option>
+          </select>
+        </div>
+        <div>
           <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
           <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">{item.operationMode}</p>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.24em]">页面定位</p>
+          <p className="text-xs uppercase tracking-[0.24em]">二次维护说明</p>
           <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">
-            这里优先展示库和表本身，让用户先看清有哪些数据库资产，再决定后续是否做纳管、脱敏和工具暴露。
+            库表第一次初始化录入后，可以在这里继续二次维护，包括补充详细描述、调整敏感级别，以及修正后续纳管规则。
           </p>
         </div>
+        <button className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
+          保存库表维护
+        </button>
       </div>
     </SectionCard>
   );
