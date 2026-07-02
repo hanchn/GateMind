@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Button } from "antd";
 
 import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
@@ -93,13 +94,9 @@ export function ConnectionRequestForm() {
               <p className="text-sm text-ink-muted">库表选择</p>
               <HelpTooltip content="支持多库多表申请，历史已选会默认带出。" />
             </div>
-            <button
-              type="button"
-              className="rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-2 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
-              onClick={() => setPickerOpen(true)}
-            >
+            <Button type="primary" onClick={() => setPickerOpen(true)}>
               选择库表
-            </button>
+            </Button>
           </div>
           <div className="text-sm text-ink-muted">当前已选 {selectedTableItems.length} 张表。</div>
         </div>
@@ -165,14 +162,11 @@ export function ConnectionRequestForm() {
           </div>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
-          <button
-            className="rounded-2xl border border-[#d9e1ec] bg-white px-4 py-3 text-sm text-[#0f172a] transition hover:bg-[#f8fafc]"
-            onClick={() => setMessage("已保存为草稿功能")}
-          >
+          <Button onClick={() => setMessage("已保存为草稿功能")}>
             保存草稿
-          </button>
-          <button
-            className="rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
+          </Button>
+          <Button
+            type="primary"
             onClick={() => {
               if (!reason.trim()) {
                 setMessage("请先填写申请原因");
@@ -188,7 +182,7 @@ export function ConnectionRequestForm() {
             }}
           >
             提交发布
-          </button>
+          </Button>
         </div>
         <div className="text-xs text-ink-muted">
           已选 {selectedTableItems.length} 张表，下一版本 {bumpVersion(version)}
@@ -203,26 +197,19 @@ export function ConnectionRequestForm() {
                 <h3 className="font-display text-2xl text-ink">选择库表</h3>
                 <HelpTooltip content="选择库后，在右侧表上直接勾选增删改查。" />
               </div>
-              <button
-                type="button"
-                className="rounded-2xl border border-[#d9e1ec] bg-white px-4 py-2 text-sm text-[#0f172a] transition hover:bg-[#f8fafc]"
-                onClick={() => setPickerOpen(false)}
-              >
+              <Button onClick={() => setPickerOpen(false)}>
                 完成
-              </button>
+              </Button>
             </div>
             <div className="mt-6 grid gap-4 xl:grid-cols-[0.42fr_1fr]">
               <div className="min-h-0">
                 <div className="max-h-[460px] space-y-2 overflow-auto pr-1">
                   {databases.map((database) => (
-                    <button
+                    <Button
                       key={database.database}
-                      type="button"
-                      className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
-                        activeDatabase === database.database
-                          ? "border-[#91caff] bg-[#e6f4ff]"
-                          : "border-[#e6ebf5] bg-white hover:bg-[#f8fafc]"
-                      }`}
+                      type={activeDatabase === database.database ? "primary" : "default"}
+                      block
+                      className="!h-auto !py-3 text-left"
                       onClick={() => setActiveDatabase(database.database)}
                     >
                       <p className="font-semibold text-ink">{database.database}</p>
@@ -230,7 +217,7 @@ export function ConnectionRequestForm() {
                         环境：{database.environment} | 表数：{database.total}
                       </p>
                       <p className="mt-2 text-xs text-cyan-200">已选表：{database.selected}</p>
-                    </button>
+                    </Button>
                   ))}
                 </div>
               </div>
