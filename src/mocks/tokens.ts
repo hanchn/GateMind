@@ -9,7 +9,7 @@ export const tokens: PersonalToken[] = [
     lastUsedAt: "2026-07-02 16:30",
     status: "active",
     maskedValue: "gtm_cli_****x91a",
-    requestRateLimit: "90 次/分钟",
+    requestRateLimit: "1 分钟最多请求 60 次",
     dataWindow: "默认 50 行，最大 500 行",
   },
   {
@@ -20,7 +20,7 @@ export const tokens: PersonalToken[] = [
     lastUsedAt: "2026-07-02 12:04",
     status: "expiring",
     maskedValue: "gtm_bot_****q73k",
-    requestRateLimit: "120 次/分钟",
+    requestRateLimit: "1 分钟最多请求 120 次",
     dataWindow: "默认 100 行，最大 1,000 行",
   },
   {
@@ -31,7 +31,7 @@ export const tokens: PersonalToken[] = [
     lastUsedAt: "2026-06-27 09:11",
     status: "revoked",
     maskedValue: "gtm_old_****r20v",
-    requestRateLimit: "30 次/分钟",
+    requestRateLimit: "1 分钟最多请求 30 次",
     dataWindow: "默认 20 行，最大 100 行",
   },
 ];

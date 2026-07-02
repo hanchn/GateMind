@@ -11,7 +11,7 @@ export const connections: ConnectionSummary[] = [
     databaseCount: 1,
     lastCheckedAt: "2026-07-02 16:40",
     requestSource: "系统初始化",
-    rateLimit: "120 次/分钟，峰值并发 10",
+    rateLimit: "1 分钟最多请求 60 次，峰值并发 10",
     defaultDataWindow: "默认 100 行，最大导出 2,000 行",
   },
   {
@@ -24,7 +24,7 @@ export const connections: ConnectionSummary[] = [
     databaseCount: 4,
     lastCheckedAt: "2026-07-02 14:18",
     requestSource: "申请单 req-3021",
-    rateLimit: "60 次/分钟，峰值并发 5",
+    rateLimit: "1 分钟最多请求 60 次，峰值并发 5",
     defaultDataWindow: "默认 50 行，最大导出 1,000 行",
   },
   {
@@ -37,7 +37,7 @@ export const connections: ConnectionSummary[] = [
     databaseCount: 12,
     lastCheckedAt: "2026-07-02 13:02",
     requestSource: "申请单 req-2988",
-    rateLimit: "30 次/分钟，峰值并发 3",
+    rateLimit: "1 分钟最多请求 30 次，峰值并发 3",
     defaultDataWindow: "默认 20 行，最大导出 500 行",
   },
 ];
