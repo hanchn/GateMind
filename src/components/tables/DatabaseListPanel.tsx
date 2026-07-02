@@ -6,18 +6,19 @@ import type { TableGovernanceItem } from "@/types";
 
 interface DatabaseListPanelProps {
   databases: Array<{
+    key: string;
     databaseName: string;
     environment: string;
     connectionName: string;
     tableCount: number;
   }>;
-  selectedDatabaseName?: string;
-  onSelect: (databaseName: string) => void;
+  selectedDatabaseKey?: string;
+  onSelect: (databaseKey: string) => void;
 }
 
 export function DatabaseListPanel({
   databases,
-  selectedDatabaseName,
+  selectedDatabaseKey,
   onSelect,
 }: DatabaseListPanelProps) {
   return (
@@ -25,18 +26,18 @@ export function DatabaseListPanel({
       <div className="max-h-[620px] space-y-3 overflow-auto pr-1">
         {databases.map((database) => (
           <Button
-            key={`${database.connectionName}-${database.databaseName}-${database.environment}`}
-            type={selectedDatabaseName === database.databaseName ? "primary" : "default"}
+            key={database.key}
+            type="default"
             block
             className="!h-auto !py-4 text-left"
-            onClick={() => onSelect(database.databaseName)}
+            onClick={() => onSelect(database.key)}
           >
             <div className="flex items-center justify-between gap-3">
               <div>
                 <p className="font-semibold text-ink">{database.databaseName}</p>
                 <p className="mt-1 text-xs text-ink-muted">{database.connectionName}</p>
               </div>
-              <StatusBadge status={selectedDatabaseName === database.databaseName ? "active" : "draft"} />
+              <StatusBadge status={selectedDatabaseKey === database.key ? "active" : "draft"} />
             </div>
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-ink-muted">
               <span>环境：{database.environment}</span>
