@@ -91,86 +91,83 @@ export function TablesPage() {
             setIsEditingDatabaseDescription(false);
           }}
         />
-        <SectionCard
-          title={selectedDatabase ? `${selectedDatabase.databaseName} 库说明` : "库说明"}
-          action={
-            selectedDatabase ? (
-              <div className="flex items-center gap-3">
-                {isEditingDatabaseDescription ? (
-                  <Button onClick={() => setIsEditingDatabaseDescription(false)}>取消</Button>
-                ) : (
-                  <Button onClick={() => setIsEditingDatabaseDescription(true)}>编辑库描述</Button>
-                )}
-                <Button onClick={() => setShowTableList(true)}>
-                  查看表列表
-                </Button>
-              </div>
-            ) : undefined
-          }
-        >
-          {selectedDatabase ? (
-            <div className="space-y-4 text-sm text-ink-muted">
-              <div className="grid gap-4 md:grid-cols-2">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
-                  <p className="mt-2 text-ink">{selectedDatabase.connectionName}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.24em]">环境</p>
-                  <p className="mt-2 text-ink">{selectedDatabase.environment}</p>
-                </div>
-                <div>
-                  <p className="text-xs uppercase tracking-[0.24em]">表数量</p>
-                  <p className="mt-2 text-ink">{selectedDatabase.tableCount}</p>
-                </div>
-              </div>
-              <div>
-                <p className="text-xs uppercase tracking-[0.24em]">库描述</p>
-                <textarea
-                  rows={5}
-                  value={databaseDescriptions[selectedDatabase.key] ?? ""}
-                  disabled={!isEditingDatabaseDescription}
-                  onChange={(event) =>
-                    setDatabaseDescriptions((prev) => ({
-                      ...prev,
-                      [selectedDatabase.key]: event.target.value,
-                    }))
-                  }
-                  className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
-                />
-              </div>
-              {isEditingDatabaseDescription ? (
-                <Button onClick={() => setIsEditingDatabaseDescription(false)}>
-                  保存库描述
-                </Button>
-              ) : null}
-            </div>
-          ) : (
-            <p className="text-sm text-ink-muted">默认先展示库列表。选择一个库后，可在右侧查看说明并进入表列表。</p>
-          )}
-        </SectionCard>
-      </div>
-      {showTableList && selectedDatabase ? (
-        <div className="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
-          <SectionCard
-            title={`${selectedDatabase.databaseName} 表列表`}
-            action={<Button onClick={() => setShowTableList(false)}>返回库列表</Button>}
-          >
-            <TableGovernanceTable
-              databaseName={selectedDatabase.databaseName}
-              items={filteredItems}
-              onSelect={setSelectedItem}
+        {showTableList && selectedDatabase ? (
+          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+            <SectionCard
+              title={`${selectedDatabase.databaseName} 表列表`}
+              action={<Button onClick={() => setShowTableList(false)}>返回库说明</Button>}
+            >
+              <TableGovernanceTable
+                databaseName={selectedDatabase.databaseName}
+                items={filteredItems}
+                onSelect={setSelectedItem}
+              />
+            </SectionCard>
+            <TableGovernancePanel
+              item={selectedItem}
+              onSave={(itemId, updates) => {
+                setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item)));
+                setSelectedItem((prev) => (prev?.id === itemId ? { ...prev, ...updates } : prev));
+              }}
             />
+          </div>
+        ) : (
+          <SectionCard
+            title={selectedDatabase ? `${selectedDatabase.databaseName} 库说明` : "库说明"}
+            action={
+              selectedDatabase ? (
+                <div className="flex items-center gap-3">
+                  {isEditingDatabaseDescription ? (
+                    <Button onClick={() => setIsEditingDatabaseDescription(false)}>取消</Button>
+                  ) : (
+                    <Button onClick={() => setIsEditingDatabaseDescription(true)}>编辑库描述</Button>
+                  )}
+                  <Button onClick={() => setShowTableList(true)}>查看表列表</Button>
+                </div>
+              ) : undefined
+            }
+          >
+            {selectedDatabase ? (
+              <div className="space-y-4 text-sm text-ink-muted">
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
+                    <p className="mt-2 text-ink">{selectedDatabase.connectionName}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em]">环境</p>
+                    <p className="mt-2 text-ink">{selectedDatabase.environment}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.24em]">表数量</p>
+                    <p className="mt-2 text-ink">{selectedDatabase.tableCount}</p>
+                  </div>
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em]">库描述</p>
+                  <textarea
+                    rows={5}
+                    value={databaseDescriptions[selectedDatabase.key] ?? ""}
+                    disabled={!isEditingDatabaseDescription}
+                    onChange={(event) =>
+                      setDatabaseDescriptions((prev) => ({
+                        ...prev,
+                        [selectedDatabase.key]: event.target.value,
+                      }))
+                    }
+                    className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
+                  />
+                </div>
+                {isEditingDatabaseDescription ? (
+                  <Button onClick={() => setIsEditingDatabaseDescription(false)}>保存库描述</Button>
+                ) : null}
+              </div>
+            ) : (
+              <p className="text-sm text-ink-muted">默认先展示库列表。选择一个库后，可在右侧查看说明并进入表列表。</p>
+            )}
           </SectionCard>
-          <TableGovernancePanel
-            item={selectedItem}
-            onSave={(itemId, updates) => {
-              setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item)));
-              setSelectedItem((prev) => (prev?.id === itemId ? { ...prev, ...updates } : prev));
-            }}
-          />
-        </div>
-      ) : null}
+        )}
+      </div>
     </div>
   );
 }
