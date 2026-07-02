@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 
 import { PageHeader } from "@/components/shell/PageHeader";
 import { DatabaseListPanel } from "@/components/tables/DatabaseListPanel";
@@ -66,6 +66,13 @@ export function TablesPage() {
     ? items.filter((item) => getDatabaseKey(item) === selectedDatabase.key)
     : [];
 
+  function closeDatabaseDetail() {
+    setSelectedDatabaseKey(undefined);
+    setSelectedItem(undefined);
+    setShowTableList(false);
+    setIsEditingDatabaseDescription(false);
+  }
+
   return (
     <div className="space-y-8">
       <PageHeader title="库表展示与资产总览" />
@@ -80,94 +87,116 @@ export function TablesPage() {
       >
         <p className="text-sm text-ink-muted">先扫描录入，再统一展示和维护。</p>
       </SectionCard>
-      <div className="grid gap-6 xl:grid-cols-[0.9fr_1.1fr]">
-        <DatabaseListPanel
-          databases={databases}
-          selectedDatabaseKey={selectedDatabaseKey}
-          onSelect={(databaseKey) => {
-            setSelectedDatabaseKey(databaseKey);
-            setSelectedItem(undefined);
-            setShowTableList(false);
-            setIsEditingDatabaseDescription(false);
-          }}
-        />
-        {showTableList && selectedDatabase ? (
-          <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-            <SectionCard
-              title={`${selectedDatabase.databaseName} 表列表`}
-              action={<Button onClick={() => setShowTableList(false)}>返回库说明</Button>}
-            >
-              <TableGovernanceTable
-                databaseName={selectedDatabase.databaseName}
-                items={filteredItems}
-                onSelect={setSelectedItem}
-              />
-            </SectionCard>
-            <TableGovernancePanel
-              item={selectedItem}
-              onSave={(itemId, updates) => {
-                setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item)));
-                setSelectedItem((prev) => (prev?.id === itemId ? { ...prev, ...updates } : prev));
-              }}
-            />
-          </div>
-        ) : (
-          <SectionCard
-            title={selectedDatabase ? `${selectedDatabase.databaseName} 库说明` : "库说明"}
-            action={
-              selectedDatabase ? (
-                <div className="flex items-center gap-3">
-                  {isEditingDatabaseDescription ? (
-                    <Button onClick={() => setIsEditingDatabaseDescription(false)}>取消</Button>
+      <DatabaseListPanel
+        databases={databases}
+        selectedDatabaseKey={selectedDatabaseKey}
+        onSelect={(databaseKey) => {
+          setSelectedDatabaseKey(databaseKey);
+          setSelectedItem(undefined);
+          setShowTableList(false);
+          setIsEditingDatabaseDescription(false);
+        }}
+      />
+      <Modal
+        title={
+          selectedDatabase
+            ? showTableList
+              ? `${selectedDatabase.databaseName} 表列表`
+              : `${selectedDatabase.databaseName} 库详情`
+            : "库详情"
+        }
+        open={Boolean(selectedDatabase)}
+        onCancel={closeDatabaseDetail}
+        width={showTableList ? 1200 : 820}
+        footer={
+          selectedDatabase
+            ? showTableList
+              ? [
+                  <Button key="close" onClick={closeDatabaseDetail}>
+                    关闭
+                  </Button>,
+                  <Button key="back" onClick={() => setShowTableList(false)}>
+                    返回库详情
+                  </Button>,
+                ]
+              : [
+                  <Button key="close" onClick={closeDatabaseDetail}>
+                    关闭
+                  </Button>,
+                  isEditingDatabaseDescription ? (
+                    <Button key="cancel" onClick={() => setIsEditingDatabaseDescription(false)}>
+                      取消
+                    </Button>
                   ) : (
-                    <Button onClick={() => setIsEditingDatabaseDescription(true)}>编辑库描述</Button>
-                  )}
-                  <Button onClick={() => setShowTableList(true)}>查看表列表</Button>
-                </div>
-              ) : undefined
-            }
-          >
-            {selectedDatabase ? (
-              <div className="space-y-4 text-sm text-ink-muted">
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
-                    <p className="mt-2 text-ink">{selectedDatabase.connectionName}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em]">环境</p>
-                    <p className="mt-2 text-ink">{selectedDatabase.environment}</p>
-                  </div>
-                  <div>
-                    <p className="text-xs uppercase tracking-[0.24em]">表数量</p>
-                    <p className="mt-2 text-ink">{selectedDatabase.tableCount}</p>
-                  </div>
+                    <Button key="edit" onClick={() => setIsEditingDatabaseDescription(true)}>
+                      编辑库描述
+                    </Button>
+                  ),
+                  isEditingDatabaseDescription ? (
+                    <Button key="save" onClick={() => setIsEditingDatabaseDescription(false)}>
+                      保存库描述
+                    </Button>
+                  ) : null,
+                  <Button key="view-tables" onClick={() => setShowTableList(true)}>
+                    查看表列表
+                  </Button>,
+                ].filter(Boolean)
+            : []
+        }
+      >
+        {selectedDatabase ? (
+          showTableList ? (
+            <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
+              <div>
+                <TableGovernanceTable
+                  databaseName={selectedDatabase.databaseName}
+                  items={filteredItems}
+                  onSelect={setSelectedItem}
+                />
+              </div>
+              <TableGovernancePanel
+                item={selectedItem}
+                onSave={(itemId, updates) => {
+                  setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item)));
+                  setSelectedItem((prev) => (prev?.id === itemId ? { ...prev, ...updates } : prev));
+                }}
+              />
+            </div>
+          ) : (
+            <div className="space-y-4 text-sm text-ink-muted">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
+                  <p className="mt-2 text-ink">{selectedDatabase.connectionName}</p>
                 </div>
                 <div>
-                  <p className="text-xs uppercase tracking-[0.24em]">库描述</p>
-                  <textarea
-                    rows={5}
-                    value={databaseDescriptions[selectedDatabase.key] ?? ""}
-                    disabled={!isEditingDatabaseDescription}
-                    onChange={(event) =>
-                      setDatabaseDescriptions((prev) => ({
-                        ...prev,
-                        [selectedDatabase.key]: event.target.value,
-                      }))
-                    }
-                    className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
-                  />
+                  <p className="text-xs uppercase tracking-[0.24em]">环境</p>
+                  <p className="mt-2 text-ink">{selectedDatabase.environment}</p>
                 </div>
-                {isEditingDatabaseDescription ? (
-                  <Button onClick={() => setIsEditingDatabaseDescription(false)}>保存库描述</Button>
-                ) : null}
+                <div>
+                  <p className="text-xs uppercase tracking-[0.24em]">表数量</p>
+                  <p className="mt-2 text-ink">{selectedDatabase.tableCount}</p>
+                </div>
               </div>
-            ) : (
-              <p className="text-sm text-ink-muted">默认先展示库列表。选择一个库后，可在右侧查看说明并进入表列表。</p>
-            )}
-          </SectionCard>
-        )}
-      </div>
+              <div>
+                <p className="text-xs uppercase tracking-[0.24em]">库描述</p>
+                <textarea
+                  rows={5}
+                  value={databaseDescriptions[selectedDatabase.key] ?? ""}
+                  disabled={!isEditingDatabaseDescription}
+                  onChange={(event) =>
+                    setDatabaseDescriptions((prev) => ({
+                      ...prev,
+                      [selectedDatabase.key]: event.target.value,
+                    }))
+                  }
+                  className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
+                />
+              </div>
+            </div>
+          )
+        ) : null}
+      </Modal>
     </div>
   );
 }
