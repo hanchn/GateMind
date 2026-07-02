@@ -1,3 +1,5 @@
+import { Button } from "antd";
+
 import { DataTable } from "@/components/ui/DataTable";
 import { SectionCard } from "@/components/ui/SectionCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -52,6 +54,21 @@ export function DatabaseListPanel({
             title: "状态",
             render: (database) => (
               <StatusBadge status={selectedDatabaseKey === database.key ? "active" : "draft"} />
+            ),
+          },
+          {
+            key: "actions",
+            title: "操作",
+            render: (database) => (
+              <Button
+                type="link"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onSelect(database.key);
+                }}
+              >
+                查看
+              </Button>
             ),
           },
         ]}
