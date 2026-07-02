@@ -36,7 +36,7 @@ export function ConnectionRequestForm() {
   const filteredTables = tableOptions.filter((item) => item.toLowerCase().includes(tableKeyword.toLowerCase()));
 
   return (
-    <SectionCard title="发布申请" eyebrow="Application Release">
+    <SectionCard title="发布申请">
       <div className="space-y-4">
         <label className="block text-sm text-ink-muted">
           应用 / 功能名称
