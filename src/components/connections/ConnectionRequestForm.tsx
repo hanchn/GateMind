@@ -35,6 +35,7 @@ export function ConnectionRequestForm() {
   const [tableKeyword, setTableKeyword] = useState("");
   const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>(historicalSelections);
   const [activeDatabase, setActiveDatabase] = useState("project_hub");
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [version, setVersion] = useState("v1.0.0");
   const [reason, setReason] = useState("");
@@ -85,115 +86,25 @@ export function ConnectionRequestForm() {
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
-            <p className="text-sm text-ink-muted">库表选择</p>
-            <p className="text-xs text-ink-muted">支持多库多表申请，历史已选会默认带出</p>
+            <div>
+              <p className="text-sm text-ink-muted">库表选择</p>
+              <p className="mt-1 text-xs text-ink-muted">支持多库多表申请，历史已选会默认带出</p>
+            </div>
+            <button
+              type="button"
+              className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
+              onClick={() => setPickerOpen(true)}
+            >
+              选择库表
+            </button>
           </div>
-          <div className="mt-3 grid gap-4 xl:grid-cols-[0.42fr_1fr]">
-            <div className="min-h-0 rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-              <div className="max-h-[460px] space-y-2 overflow-auto pr-1">
-                {databases.map((database) => (
-                  <button
-                    key={database.database}
-                    type="button"
-                    className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
-                      activeDatabase === database.database
-                        ? "border-cyan-400/30 bg-cyan-500/10"
-                        : "border-white/10 bg-white/5 hover:bg-white/10"
-                    }`}
-                    onClick={() => setActiveDatabase(database.database)}
-                  >
-                    <p className="font-semibold text-ink">{database.database}</p>
-                    <p className="mt-1 text-xs text-ink-muted">
-                      环境：{database.environment} | 表数：{database.total}
-                    </p>
-                    <p className="mt-2 text-xs text-cyan-200">已选表：{database.selected}</p>
-                  </button>
-                ))}
-              </div>
-            </div>
-            <div className="min-h-0 rounded-2xl border border-white/10 bg-white/[0.02] p-3">
-              <label className="block text-sm text-ink-muted">
-                搜索当前库下的表
-                <input
-                  value={tableKeyword}
-                  onChange={(event) => setTableKeyword(event.target.value)}
-                  placeholder={`输入 ${activeDatabase} 下的表名`}
-                  className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
-                />
-              </label>
-              <div className="mt-3 max-h-[396px] space-y-2 overflow-auto pr-1">
-                {filteredTables.map((table) => {
-                  const currentOperations = selectedItems[table.key] ?? [];
-
-                  return (
-                    <div key={table.key} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-                      <div className="flex items-start justify-between gap-4">
-                        <div>
-                          <p className="font-semibold text-ink">{table.table}</p>
-                          <p className="mt-1 text-xs text-ink-muted">
-                            环境：{table.environment}
-                            {historicalSelections[table.key] ? " | 历史已选" : ""}
-                          </p>
-                        </div>
-                        {currentOperations.length > 0 && (
-                          <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-xs text-cyan-100">
-                            已选中
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-3 grid gap-2 md:grid-cols-4">
-                        {operationOptions.map((option) => {
-                          const checked = currentOperations.includes(option.key);
-
-                          return (
-                            <label
-                              key={option.key}
-                              className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-ink"
-                            >
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={(event) => {
-                                  const nextChecked = event.target.checked;
-                                  setSelectedItems((prev) => {
-                                    const current = prev[table.key] ?? [];
-                                    if (nextChecked) {
-                                      return {
-                                        ...prev,
-                                        [table.key]: current.includes(option.key) ? current : [...current, option.key],
-                                      };
-                                    }
-
-                                    const nextOperations = current.filter((item) => item !== option.key);
-                                    if (nextOperations.length === 0) {
-                                      const next = { ...prev };
-                                      delete next[table.key];
-                                      return next;
-                                    }
-
-                                    return {
-                                      ...prev,
-                                      [table.key]: nextOperations,
-                                    };
-                                  });
-                                }}
-                                className="h-4 w-4 rounded border-white/20 bg-transparent"
-                              />
-                              <span>{option.label}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+          <div className="text-sm text-ink-muted">
+            当前已选 {selectedTableItems.length} 张表，点击右上角 `选择库表` 进行维护。
           </div>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+        <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
             <p className="text-sm text-ink-muted">已选列表</p>
             <p className="text-xs text-ink-muted">查看每张表的增删改查选中状态</p>
@@ -245,7 +156,7 @@ export function ConnectionRequestForm() {
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
-        <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+        <div className="flex items-center justify-between gap-4 px-1 py-1">
           <div>
             <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">待发布版本</p>
             <p className="mt-2 font-display text-2xl text-ink">{version}</p>
@@ -285,6 +196,127 @@ export function ConnectionRequestForm() {
         </div>
         {message && <p className="text-sm text-cyan-200">{message}</p>}
       </div>
+      {pickerOpen ? (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6">
+          <div className="max-h-[80vh] w-full max-w-6xl rounded-[2rem] bg-[#0b1220] p-6 shadow-2xl">
+            <div className="flex items-center justify-between gap-4">
+              <div>
+                <h3 className="font-display text-2xl text-ink">选择库表</h3>
+                <p className="mt-2 text-sm text-ink-muted">选择库，右侧展示该库下的表，并在表上直接勾选增删改查。</p>
+              </div>
+              <button
+                type="button"
+                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-ink transition hover:bg-white/10"
+                onClick={() => setPickerOpen(false)}
+              >
+                完成
+              </button>
+            </div>
+            <div className="mt-6 grid gap-4 xl:grid-cols-[0.42fr_1fr]">
+              <div className="min-h-0 p-1">
+                <div className="max-h-[460px] space-y-2 overflow-auto pr-1">
+                  {databases.map((database) => (
+                    <button
+                      key={database.database}
+                      type="button"
+                      className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
+                        activeDatabase === database.database
+                          ? "border-cyan-400/30 bg-cyan-500/10"
+                          : "border-white/10 bg-white/5 hover:bg-white/10"
+                      }`}
+                      onClick={() => setActiveDatabase(database.database)}
+                    >
+                      <p className="font-semibold text-ink">{database.database}</p>
+                      <p className="mt-1 text-xs text-ink-muted">
+                        环境：{database.environment} | 表数：{database.total}
+                      </p>
+                      <p className="mt-2 text-xs text-cyan-200">已选表：{database.selected}</p>
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="min-h-0 p-1">
+                <label className="block text-sm text-ink-muted">
+                  搜索当前库下的表
+                  <input
+                    value={tableKeyword}
+                    onChange={(event) => setTableKeyword(event.target.value)}
+                    placeholder={`输入 ${activeDatabase} 下的表名`}
+                    className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+                  />
+                </label>
+                <div className="mt-3 max-h-[396px] space-y-2 overflow-auto pr-1">
+                  {filteredTables.map((table) => {
+                    const currentOperations = selectedItems[table.key] ?? [];
+
+                    return (
+                      <div key={table.key} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                        <div className="flex items-start justify-between gap-4">
+                          <div>
+                            <p className="font-semibold text-ink">{table.table}</p>
+                            <p className="mt-1 text-xs text-ink-muted">
+                              环境：{table.environment}
+                              {historicalSelections[table.key] ? " | 历史已选" : ""}
+                            </p>
+                          </div>
+                          {currentOperations.length > 0 && (
+                            <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-xs text-cyan-100">
+                              已选中
+                            </span>
+                          )}
+                        </div>
+                        <div className="mt-3 grid gap-2 md:grid-cols-4">
+                          {operationOptions.map((option) => {
+                            const checked = currentOperations.includes(option.key);
+
+                            return (
+                              <label
+                                key={option.key}
+                                className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-ink"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked={checked}
+                                  onChange={(event) => {
+                                    const nextChecked = event.target.checked;
+                                    setSelectedItems((prev) => {
+                                      const current = prev[table.key] ?? [];
+                                      if (nextChecked) {
+                                        return {
+                                          ...prev,
+                                          [table.key]: current.includes(option.key) ? current : [...current, option.key],
+                                        };
+                                      }
+
+                                      const nextOperations = current.filter((item) => item !== option.key);
+                                      if (nextOperations.length === 0) {
+                                        const next = { ...prev };
+                                        delete next[table.key];
+                                        return next;
+                                      }
+
+                                      return {
+                                        ...prev,
+                                        [table.key]: nextOperations,
+                                      };
+                                    });
+                                  }}
+                                  className="h-4 w-4 rounded border-white/20 bg-transparent"
+                                />
+                                <span>{option.label}</span>
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </SectionCard>
   );
 }
