@@ -8,21 +8,25 @@ import type { TableGovernanceItem } from "@/types";
 
 export function TablesPage() {
   const [items, setItems] = useState<TableGovernanceItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<TableGovernanceItem | undefined>(undefined);
 
   useEffect(() => {
-    listGovernanceTables().then(setItems);
+    listGovernanceTables().then((data) => {
+      setItems(data);
+      setSelectedItem(data[0]);
+    });
   }, []);
 
   return (
     <div className="space-y-8">
       <PageHeader
         eyebrow="Table Governance"
-        title="库表治理与增删入口"
-        description="统一查看连接下的数据库资产，配置纳管状态、敏感级别、默认数据量和新增删除动作限制。"
+        title="库表展示与资产总览"
+        description="这里优先展示连接下有哪些库、有哪些表、字段数量和数据规模，再在此基础上叠加纳管状态。"
       />
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <TableGovernanceTable items={items} />
-        <TableGovernancePanel />
+        <TableGovernanceTable items={items} onSelect={setSelectedItem} />
+        <TableGovernancePanel item={selectedItem} />
       </div>
     </div>
   );
