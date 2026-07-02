@@ -27,19 +27,19 @@ function bumpVersion(version: string) {
 
 export function ConnectionRequestForm() {
   const [name, setName] = useState("");
-  const [scope, setScope] = useState("只读");
   const [tableKeyword, setTableKeyword] = useState("");
   const [selectedTable, setSelectedTable] = useState("project_hub.milestone_snapshots");
   const [operations, setOperations] = useState<string[]>(["read"]);
   const [message, setMessage] = useState("");
   const [version, setVersion] = useState("v1.0.0");
+  const [reason, setReason] = useState("");
   const filteredTables = tableOptions.filter((item) => item.toLowerCase().includes(tableKeyword.toLowerCase()));
 
   return (
-    <SectionCard title="功能发布" eyebrow="Capability Release">
+    <SectionCard title="发布申请" eyebrow="Application Release">
       <div className="space-y-4">
         <label className="block text-sm text-ink-muted">
-          功能名称
+          应用 / 功能名称
           <input
             value={name}
             onChange={(event) => setName(event.target.value)}
@@ -47,21 +47,9 @@ export function ConnectionRequestForm() {
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
-        <label className="block text-sm text-ink-muted">
-          执行范围
-          <select
-            value={scope}
-            onChange={(event) => setScope(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
-          >
-            <option>只读</option>
-            <option>只读 + 元数据</option>
-            <option>读写申请</option>
-          </select>
-        </label>
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
           <label className="block text-sm text-ink-muted">
-            搜索所有库下面的表
+            选择库表
             <input
               value={tableKeyword}
               onChange={(event) => setTableKeyword(event.target.value)}
@@ -88,7 +76,10 @@ export function ConnectionRequestForm() {
           </div>
         </div>
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-sm text-ink-muted">勾选该表允许的增删改查</p>
+          <div className="flex items-center justify-between gap-4">
+            <p className="text-sm text-ink-muted">勾选该表允许的增删改查</p>
+            <p className="text-xs text-ink-muted">这里直接作为功能权限，不再单独设置执行范围</p>
+          </div>
           <div className="mt-3 grid gap-3 sm:grid-cols-4">
             {operationOptions.map((option) => {
               const checked = operations.includes(option.key);
@@ -116,22 +107,23 @@ export function ConnectionRequestForm() {
           </div>
         </div>
         <label className="block text-sm text-ink-muted">
-          功能说明
+          申请原因
           <textarea
-            rows={4}
-            placeholder="描述这个功能基于哪个连接、哪个库表，以及它服务哪个业务域。"
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            rows={3}
+            placeholder="必填，说明为什么要创建这个应用 / 发布这个功能。"
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-sm text-ink-muted">版本信息</p>
-          <div className="mt-3 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+          <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
             <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">当前待发布版本</p>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">待发布版本</p>
               <p className="mt-2 font-display text-2xl text-ink">{version}</p>
             </div>
             <p className="max-w-xs text-right text-xs leading-6 text-ink-muted">
-              点击发布时默认自动更新版本号，当前规则为补丁版本 `+1`。
+              发布时默认自动更新版本号，规则为补丁版本 `+1`。
             </p>
           </div>
         </div>
@@ -145,17 +137,21 @@ export function ConnectionRequestForm() {
           <button
             className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
             onClick={() => {
+              if (!reason.trim()) {
+                setMessage("请先填写申请原因");
+                return;
+              }
               const nextVersion = bumpVersion(version);
               setVersion(nextVersion);
-              setMessage(`已提交功能发布，版本自动更新为 ${nextVersion}，进入审批流程`);
+              setMessage(`已提交发布申请，版本自动更新为 ${nextVersion}，进入审批流程`);
             }}
           >
-            发布功能
+            提交发布
           </button>
         </div>
-        <p className="text-xs leading-6 text-ink-muted">
-          当前配置：`{selectedTable}`，允许动作：{operations.length > 0 ? operations.join(" / ") : "未勾选"}
-        </p>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-6 text-ink-muted">
+          发布内容：`{selectedTable}` | 权限：{operations.length > 0 ? operations.join(" / ") : "未勾选"} | 下一版本：{bumpVersion(version)}
+        </div>
         {message && <p className="text-sm text-cyan-200">{message}</p>}
       </div>
     </SectionCard>
