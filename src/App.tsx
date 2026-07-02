@@ -4,9 +4,13 @@ import { AppSidebar } from "@/components/shell/AppSidebar";
 import { TopStatusBar } from "@/components/shell/TopStatusBar";
 import { ApprovalsPage } from "@/pages/ApprovalsPage";
 import { AuditPage } from "@/pages/AuditPage";
+import { ConnectionRequestsPage } from "@/pages/ConnectionRequestsPage";
+import { ConnectionsPage } from "@/pages/ConnectionsPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { DomainsPage } from "@/pages/DomainsPage";
 import { PoliciesPage } from "@/pages/PoliciesPage";
+import { TablesPage } from "@/pages/TablesPage";
+import { TokensPage } from "@/pages/TokensPage";
 import { ToolsPage } from "@/pages/ToolsPage";
 
 function AppLayout() {
@@ -36,6 +40,10 @@ export default function App() {
           <Route path="/approvals" element={<ApprovalsPage />} />
           <Route path="/audit" element={<AuditPage />} />
           <Route path="/domains" element={<DomainsPage />} />
+          <Route path="/connections" element={<ConnectionsPage />} />
+          <Route path="/connection-requests" element={<ConnectionRequestsPage />} />
+          <Route path="/tables" element={<TablesPage />} />
+          <Route path="/tokens" element={<TokensPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -118,6 +118,8 @@ export interface TableGovernanceItem {
   connectionName: string;
   databaseName: string;
   tableName: string;
+  fieldCount: number;
+  estimatedRows: string;
   sensitivity: string;
   status: GovernanceStatus;
   owner: string;
