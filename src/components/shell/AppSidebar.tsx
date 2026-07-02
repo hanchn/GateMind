@@ -1,4 +1,4 @@
-import { Shield, Boxes, SlidersHorizontal, ClipboardCheck, ScrollText, Orbit } from "lucide-react";
+import { Shield, Boxes, SlidersHorizontal, ClipboardCheck, ScrollText, Orbit, PlugZap, FileInput, TableProperties, KeyRound } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 import { cn } from "@/lib/utils";
@@ -10,6 +10,10 @@ const navItems = [
   { to: "/approvals", label: "变更审批", icon: ClipboardCheck },
   { to: "/audit", label: "审计日志", icon: ScrollText },
   { to: "/domains", label: "业务域", icon: Orbit },
+  { to: "/connections", label: "数据连接", icon: PlugZap },
+  { to: "/connection-requests", label: "连接申请", icon: FileInput },
+  { to: "/tables", label: "库表治理", icon: TableProperties },
+  { to: "/tokens", label: "个人 Token", icon: KeyRound },
 ];
 
 export function AppSidebar() {
