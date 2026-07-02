@@ -15,11 +15,7 @@ export function ConnectionRequestsPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        eyebrow="Capability Release"
-        title="应用发布"
-        description="选表、勾选增删改查、填写申请原因，系统自动更新版本号后进入审批。"
-      />
+      <PageHeader title="应用发布" description="统一提交发布申请并进入审批。" />
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <ConnectionRequestForm />
         <ConnectionRequestTable items={items} />

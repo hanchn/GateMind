@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { SectionCard } from "@/components/ui/SectionCard";
+import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { TableGovernanceItem } from "@/types";
 
@@ -19,15 +20,18 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
 
   if (!item) {
     return (
-      <SectionCard title="库表详情" eyebrow="Table Detail">
-        <p className="text-sm leading-7 text-ink-muted">点击左侧任意库表后，这里会展示它所属连接、字段数量、预估数据量和当前纳管状态。</p>
+      <SectionCard title="库表详情">
+        <p className="text-sm text-ink-muted">选择库表后查看详情。</p>
       </SectionCard>
     );
   }
 
   return (
-    <SectionCard title={`${item.databaseName}.${item.tableName}`} eyebrow="Table Detail">
-      <div className="space-y-4 text-sm leading-7 text-ink-muted">
+    <SectionCard
+      title={`${item.databaseName}.${item.tableName}`}
+      action={<HelpTooltip content="初始化录入后，可在这里补充描述、调整敏感级别并维护纳管信息。" />}
+    >
+      <div className="space-y-4 text-sm text-ink-muted">
         <div className="flex flex-wrap items-center gap-3">
           <StatusBadge status={item.status} />
           <span className="text-sm text-ink-muted">敏感级别：{item.sensitivity}</span>
@@ -55,7 +59,10 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           </div>
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.24em]">库表详细描述</p>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+            <p>库表详细描述</p>
+            <HelpTooltip content="补充表用途、口径和主要字段说明。" />
+          </div>
           <textarea
             value={draftDescription}
             onChange={(event) => setDraftDescription(event.target.value)}
@@ -64,7 +71,10 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           />
         </div>
         <div>
-          <p className="text-xs uppercase tracking-[0.24em]">表的敏感级别</p>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+            <p>表的敏感级别</p>
+            <HelpTooltip content="用于标记数据敏感程度，影响后续暴露和审批策略。" />
+          </div>
           <select
             value={draftSensitivity}
             onChange={(event) => setDraftSensitivity(event.target.value)}
@@ -78,13 +88,7 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
         </div>
         <div>
           <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
-          <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">{item.operationMode}</p>
-        </div>
-        <div>
-          <p className="text-xs uppercase tracking-[0.24em]">二次维护说明</p>
-          <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">
-            库表第一次初始化录入后，可以在这里继续二次维护，包括补充详细描述、调整敏感级别，以及修正后续纳管规则。
-          </p>
+          <p className="mt-2 text-ink">{item.operationMode}</p>
         </div>
         <button className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
           保存库表维护

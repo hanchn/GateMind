@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { SectionCard } from "@/components/ui/SectionCard";
+import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { createPersonalToken } from "@/services/tokenService";
 
 export function TokenCreatePanel() {
@@ -9,7 +10,7 @@ export function TokenCreatePanel() {
   const [message, setMessage] = useState("");
 
   return (
-    <SectionCard title="创建个人 Token" eyebrow="Personal Access Token">
+    <SectionCard title="创建个人 Token" action={<HelpTooltip content="Token 不自动续期，到期后立即失效。" />}>
       <div className="space-y-4">
         <label className="block text-sm text-ink-muted">
           Token 名称
@@ -21,7 +22,10 @@ export function TokenCreatePanel() {
           />
         </label>
         <label className="block text-sm text-ink-muted">
-          Token 有效期
+          <span className="flex items-center gap-2">
+            <span>Token 有效期</span>
+            <HelpTooltip content="可选 1 天到 1 年，不自动续期。" />
+          </span>
           <select
             value={ttl}
             onChange={(event) => setTtl(event.target.value)}
@@ -35,9 +39,6 @@ export function TokenCreatePanel() {
             <option>1 年</option>
           </select>
         </label>
-        <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-6 text-ink-muted">
-          Token 不自动续期，达到有效期后立即失效。
-        </p>
         <button
           className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
           onClick={async () => {

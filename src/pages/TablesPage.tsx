@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { PageHeader } from "@/components/shell/PageHeader";
 import { DatabaseListPanel } from "@/components/tables/DatabaseListPanel";
 import { SectionCard } from "@/components/ui/SectionCard";
+import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { TableGovernancePanel } from "@/components/tables/TableGovernancePanel";
 import { TableGovernanceTable } from "@/components/tables/TableGovernanceTable";
 import { listGovernanceTables } from "@/services/tableService";
@@ -46,25 +47,19 @@ export function TablesPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        eyebrow="Table Governance"
-        title="库表展示与资产总览"
-        description="第一次应先初始化录入库表，把连接下的数据库资产扫出来；录入完成后，再在这里统一展示库、表、字段数量和数据规模。"
-      />
+      <PageHeader title="库表展示与资产总览" />
       <SectionCard
-        title="初始化录入库表"
-        eyebrow="Initial Import"
+        title="录入库表"
         action={
-          <button className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
-            扫描并录入库表
-          </button>
+          <div className="flex items-center gap-3">
+            <HelpTooltip content="先扫描连接下的数据库和表结构，录入后再统一展示和维护。" />
+            <button className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
+              扫描并录入库表
+            </button>
+          </div>
         }
       >
-        <div className="grid gap-4 text-sm leading-7 text-ink-muted lg:grid-cols-3">
-          <p>第一步：基于连接扫描数据库和表结构。</p>
-          <p>第二步：把库表资产录入 GateMind，形成统一资产清单。</p>
-          <p>第三步：点击某个库后，展示该库下面的所有表，再做维护和发布。</p>
-        </div>
+        <p className="text-sm text-ink-muted">先扫描录入，再统一展示和维护。</p>
       </SectionCard>
       <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr_0.9fr]">
         <DatabaseListPanel

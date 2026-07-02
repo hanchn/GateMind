@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { SectionCard } from "@/components/ui/SectionCard";
+import { HelpTooltip } from "@/components/ui/HelpTooltip";
 
 const tableOptions = [
   { key: "project_hub.milestone_snapshots", database: "project_hub", table: "milestone_snapshots", environment: "预发布" },
@@ -88,9 +89,9 @@ export function ConnectionRequestForm() {
         </label>
         <div className="space-y-3">
           <div className="flex items-center justify-between gap-4">
-            <div>
+            <div className="flex items-center gap-2">
               <p className="text-sm text-ink-muted">库表选择</p>
-              <p className="mt-1 text-xs text-ink-muted">支持多库多表申请，历史已选会默认带出</p>
+              <HelpTooltip content="支持多库多表申请，历史已选会默认带出。" />
             </div>
             <button
               type="button"
@@ -100,19 +101,17 @@ export function ConnectionRequestForm() {
               选择库表
             </button>
           </div>
-          <div className="text-sm text-ink-muted">
-            当前已选 {selectedTableItems.length} 张表，点击右上角 `选择库表` 进行维护。
-          </div>
+          <div className="text-sm text-ink-muted">当前已选 {selectedTableItems.length} 张表。</div>
         </div>
         <div className="space-y-3">
-          <div className="flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
             <p className="text-sm text-ink-muted">已选列表</p>
-            <p className="text-xs text-ink-muted">查看每张表的增删改查选中状态</p>
+            <HelpTooltip content="查看每张表的增删改查状态。" />
           </div>
           <div className="mt-3 max-h-[260px] space-y-2 overflow-auto pr-1">
             {selectedTableItems.length === 0 ? (
               <p className="rounded-2xl border border-dashed border-white/10 px-4 py-3 text-sm text-ink-muted">
-                还没有选中任何库表
+                暂无已选库表
               </p>
             ) : (
               selectedTableItems.map((item) => (
@@ -158,12 +157,12 @@ export function ConnectionRequestForm() {
         </label>
         <div className="flex items-center justify-between gap-4 px-1 py-1">
           <div>
-            <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">待发布版本</p>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.22em] text-ink-muted">
+              <p>待发布版本</p>
+              <HelpTooltip content="提交后补丁版本自动加 1。" />
+            </div>
             <p className="mt-2 font-display text-2xl text-ink">{version}</p>
           </div>
-          <p className="max-w-xs text-right text-xs leading-6 text-ink-muted">
-            发布时默认自动更新版本号，规则为补丁版本 `+1`。
-          </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <button
@@ -191,8 +190,8 @@ export function ConnectionRequestForm() {
             提交发布
           </button>
         </div>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-6 text-ink-muted">
-          已选库表：{selectedTableItems.length} 张 | 当前库：`{activeDatabase}` | 下一版本：{bumpVersion(version)}
+        <div className="text-xs text-ink-muted">
+          已选 {selectedTableItems.length} 张表，下一版本 {bumpVersion(version)}
         </div>
         {message && <p className="text-sm text-cyan-200">{message}</p>}
       </div>
@@ -200,9 +199,9 @@ export function ConnectionRequestForm() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6">
           <div className="max-h-[80vh] w-full max-w-6xl rounded-[2rem] bg-[#0b1220] p-6 shadow-2xl">
             <div className="flex items-center justify-between gap-4">
-              <div>
+              <div className="flex items-center gap-2">
                 <h3 className="font-display text-2xl text-ink">选择库表</h3>
-                <p className="mt-2 text-sm text-ink-muted">选择库，右侧展示该库下的表，并在表上直接勾选增删改查。</p>
+                <HelpTooltip content="选择库后，在右侧表上直接勾选增删改查。" />
               </div>
               <button
                 type="button"
@@ -213,7 +212,7 @@ export function ConnectionRequestForm() {
               </button>
             </div>
             <div className="mt-6 grid gap-4 xl:grid-cols-[0.42fr_1fr]">
-              <div className="min-h-0 p-1">
+              <div className="min-h-0">
                 <div className="max-h-[460px] space-y-2 overflow-auto pr-1">
                   {databases.map((database) => (
                     <button
@@ -235,7 +234,7 @@ export function ConnectionRequestForm() {
                   ))}
                 </div>
               </div>
-              <div className="min-h-0 p-1">
+              <div className="min-h-0">
                 <label className="block text-sm text-ink-muted">
                   搜索当前库下的表
                   <input
@@ -250,7 +249,7 @@ export function ConnectionRequestForm() {
                     const currentOperations = selectedItems[table.key] ?? [];
 
                     return (
-                      <div key={table.key} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+                      <div key={table.key} className="rounded-2xl bg-white/[0.04] px-4 py-3">
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="font-semibold text-ink">{table.table}</p>
@@ -272,7 +271,9 @@ export function ConnectionRequestForm() {
                             return (
                               <label
                                 key={option.key}
-                                className="flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.04] px-3 py-2 text-sm text-ink"
+                                className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition ${
+                                  checked ? "bg-cyan-500/10 text-cyan-100" : "bg-white/[0.05] text-ink-muted"
+                                }`}
                               >
                                 <input
                                   type="checkbox"
