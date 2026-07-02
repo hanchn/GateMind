@@ -38,6 +38,10 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
             <p className="mt-2 text-ink">{item.connectionName}</p>
           </div>
           <div>
+            <p className="text-xs uppercase tracking-[0.24em]">环境</p>
+            <p className="mt-2 text-ink">{item.environment}</p>
+          </div>
+          <div>
             <p className="text-xs uppercase tracking-[0.24em]">负责人</p>
             <p className="mt-2 text-ink">{item.owner}</p>
           </div>

@@ -116,16 +116,14 @@ export function ConnectionRequestForm() {
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
-        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
-            <div>
-              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">待发布版本</p>
-              <p className="mt-2 font-display text-2xl text-ink">{version}</p>
-            </div>
-            <p className="max-w-xs text-right text-xs leading-6 text-ink-muted">
-              发布时默认自动更新版本号，规则为补丁版本 `+1`。
-            </p>
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3">
+          <div>
+            <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">待发布版本</p>
+            <p className="mt-2 font-display text-2xl text-ink">{version}</p>
           </div>
+          <p className="max-w-xs text-right text-xs leading-6 text-ink-muted">
+            发布时默认自动更新版本号，规则为补丁版本 `+1`。
+          </p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <button
