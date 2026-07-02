@@ -8,15 +8,18 @@ import type { TableGovernanceItem } from "@/types";
 
 interface TableGovernancePanelProps {
   item?: TableGovernanceItem;
+  onSave?: (itemId: string, updates: Pick<TableGovernanceItem, "description" | "sensitivity">) => void;
 }
 
-export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
+export function TableGovernancePanel({ item, onSave }: TableGovernancePanelProps) {
   const [draftDescription, setDraftDescription] = useState(item?.description ?? "");
   const [draftSensitivity, setDraftSensitivity] = useState(item?.sensitivity ?? "中");
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
     setDraftDescription(item?.description ?? "");
     setDraftSensitivity(item?.sensitivity ?? "中");
+    setIsEditing(false);
   }, [item]);
 
   if (!item) {
@@ -30,7 +33,12 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
   return (
     <SectionCard
       title={`${item.databaseName}.${item.tableName}`}
-      action={<HelpTooltip content="初始化录入后，可在这里补充描述、调整敏感级别并维护纳管信息。" />}
+      action={
+        <div className="flex items-center gap-3">
+          <HelpTooltip content="初始化录入后，可在这里补充描述、调整敏感级别并维护纳管信息。" />
+          <Button onClick={() => setIsEditing((prev) => !prev)}>{isEditing ? "取消编辑" : "编辑表描述"}</Button>
+        </div>
+      }
     >
       <div className="space-y-4 text-sm text-ink-muted">
         <div className="flex flex-wrap items-center gap-3">
@@ -68,7 +76,8 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
             value={draftDescription}
             onChange={(event) => setDraftDescription(event.target.value)}
             rows={4}
-            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none"
+            disabled={!isEditing}
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
           />
         </div>
         <div>
@@ -79,7 +88,8 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           <select
             value={draftSensitivity}
             onChange={(event) => setDraftSensitivity(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+            disabled={!isEditing}
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none disabled:cursor-not-allowed disabled:bg-[#f8fafc]"
           >
             <option>低</option>
             <option>中</option>
@@ -91,9 +101,21 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
           <p className="mt-2 text-ink">{item.operationMode}</p>
         </div>
-        <Button type="primary" block>
-          保存库表维护
-        </Button>
+        {isEditing ? (
+          <Button
+            type="primary"
+            block
+            onClick={() => {
+              onSave?.(item.id, {
+                description: draftDescription,
+                sensitivity: draftSensitivity,
+              });
+              setIsEditing(false);
+            }}
+          >
+            保存表维护
+          </Button>
+        ) : null}
       </div>
     </SectionCard>
   );

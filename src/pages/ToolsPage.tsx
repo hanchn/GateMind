@@ -17,7 +17,7 @@ export function ToolsPage() {
   useEffect(() => {
     listTools().then((items) => {
       setTools(items);
-      setSelectedToolId(items[0]?.id ?? null);
+      setSelectedToolId(null);
     });
   }, [setSelectedToolId]);
 
@@ -29,7 +29,7 @@ export function ToolsPage() {
     );
   }, [keyword, tools]);
 
-  const selectedTool = filteredTools.find((tool) => tool.id === selectedToolId) ?? filteredTools[0];
+  const selectedTool = filteredTools.find((tool) => tool.id === selectedToolId);
 
   return (
     <div className="space-y-8">

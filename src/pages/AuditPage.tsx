@@ -15,11 +15,11 @@ export function AuditPage() {
   useEffect(() => {
     listAuditEvents().then((items) => {
       setEvents(items);
-      setSelectedTraceId(items[0]?.traceId ?? null);
+      setSelectedTraceId(null);
     });
   }, [setSelectedTraceId]);
 
-  const selectedEvent = events.find((event) => event.traceId === selectedTraceId) ?? events[0];
+  const selectedEvent = events.find((event) => event.traceId === selectedTraceId);
 
   return (
     <div className="space-y-8">

@@ -15,11 +15,11 @@ export function ApprovalsPage() {
   useEffect(() => {
     listApprovals().then((items) => {
       setApprovals(items);
-      setSelectedApprovalId(items[0]?.id ?? null);
+      setSelectedApprovalId(null);
     });
   }, [setSelectedApprovalId]);
 
-  const selectedApproval = approvals.find((approval) => approval.id === selectedApprovalId) ?? approvals[0];
+  const selectedApproval = approvals.find((approval) => approval.id === selectedApprovalId);
 
   return (
     <div className="space-y-8">
