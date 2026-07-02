@@ -9,7 +9,7 @@ interface SectionCardProps extends PropsWithChildren {
   className?: string;
 }
 
-export function SectionCard({ title, eyebrow, action, className, children }: SectionCardProps) {
+export function SectionCard({ title, action, className, children }: SectionCardProps) {
   return (
     <section
       className={cn(
@@ -17,11 +17,10 @@ export function SectionCard({ title, eyebrow, action, className, children }: Sec
         className,
       )}
     >
-      {(title || eyebrow || action) && (
+      {(title || action) && (
         <header className="mb-5 flex items-start justify-between gap-4">
           <div>
-            {eyebrow && <p className="text-xs uppercase tracking-[0.32em] text-ink-muted">{eyebrow}</p>}
-            {title && <h2 className="mt-2 font-display text-2xl text-ink">{title}</h2>}
+            {title && <h2 className="font-display text-2xl text-ink">{title}</h2>}
           </div>
           {action}
         </header>

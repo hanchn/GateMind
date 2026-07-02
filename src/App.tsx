@@ -9,6 +9,7 @@ import { ConnectionsPage } from "@/pages/ConnectionsPage";
 import { DashboardPage } from "@/pages/DashboardPage";
 import { DomainsPage } from "@/pages/DomainsPage";
 import { PoliciesPage } from "@/pages/PoliciesPage";
+import { SettingsPage } from "@/pages/SettingsPage";
 import { TablesPage } from "@/pages/TablesPage";
 import { TokensPage } from "@/pages/TokensPage";
 import { ToolsPage } from "@/pages/ToolsPage";
@@ -43,6 +44,7 @@ export default function App() {
           <Route path="/connections" element={<ConnectionsPage />} />
           <Route path="/connection-requests" element={<ConnectionRequestsPage />} />
           <Route path="/tables" element={<TablesPage />} />
+          <Route path="/settings" element={<SettingsPage />} />
           <Route path="/tokens" element={<TokensPage />} />
         </Route>
       </Routes>
