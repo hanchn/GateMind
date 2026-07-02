@@ -13,6 +13,8 @@ interface ApplicationCreatePanelProps {
 export function ApplicationCreatePanel({ onCreated }: ApplicationCreatePanelProps) {
   const { message } = App.useApp();
   const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [integrationDoc, setIntegrationDoc] = useState("");
   const [domain, setDomain] = useState("治理域");
   const [owner, setOwner] = useState("yuanjing");
   const [createdApplication, setCreatedApplication] = useState<ApplicationCredential | null>(null);
@@ -44,6 +46,25 @@ export function ApplicationCreatePanel({ onCreated }: ApplicationCreatePanelProp
           />
         </label>
         <label className="block text-sm text-ink-muted">
+          应用描述
+          <textarea
+            value={description}
+            onChange={(event) => setDescription(event.target.value)}
+            rows={3}
+            placeholder="例如：用于统一查询项目进度和关键节点状态。"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+          />
+        </label>
+        <label className="block text-sm text-ink-muted">
+          接入文档
+          <input
+            value={integrationDoc}
+            onChange={(event) => setIntegrationDoc(event.target.value)}
+            placeholder="例如：项目里程碑助手接入文档"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+          />
+        </label>
+        <label className="block text-sm text-ink-muted">
           所属业务域
           <input
             value={domain}
@@ -71,6 +92,8 @@ export function ApplicationCreatePanel({ onCreated }: ApplicationCreatePanelProp
 
             const created = await createApplication({
               name: name.trim(),
+              description: description.trim() || `${name.trim()} 的默认应用描述`,
+              integrationDoc: integrationDoc.trim() || `${name.trim()} 接入文档`,
               domain: domain.trim() || "治理域",
               owner: owner.trim() || "yuanjing",
             });

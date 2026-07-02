@@ -9,7 +9,7 @@ export function TopStatusBar() {
 
   return (
     <Card
-      className="rounded-[24px] border border-[#e6ebf5] shadow-[0_12px_30px_rgba(15,23,42,0.05)]"
+      className="border border-[#e6ebf5] shadow-[0_12px_30px_rgba(15,23,42,0.05)]"
       styles={{ body: { padding: 20 } }}
     >
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">

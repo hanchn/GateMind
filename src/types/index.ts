@@ -143,12 +143,15 @@ export interface PersonalToken {
 export interface ApplicationCredential {
   id: string;
   name: string;
+  description: string;
+  integrationDoc: string;
   domain: string;
   owner: string;
   appId: string;
   appSecret: string;
   status: ToolStatus;
-  createdAt: string;
+  updatedAt: string;
+  tablePermissions: Record<string, string[]>;
 }
 
 export interface DashboardSummary {

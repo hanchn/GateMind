@@ -18,6 +18,7 @@ interface DataTableProps<T> {
   rowKey: (row: T) => string;
   scrollClassName?: string;
   stickyHeader?: boolean;
+  fixedColumns?: boolean;
 }
 
 export function DataTable<T>({
@@ -27,6 +28,7 @@ export function DataTable<T>({
   rowKey,
   scrollClassName,
   stickyHeader = true,
+  fixedColumns = false,
 }: DataTableProps<T>) {
   const tableColumns: ColumnsType<T> = columns.map((column, index) => {
     const isFirstColumn = index === 0;
@@ -37,14 +39,15 @@ export function DataTable<T>({
       title: column.title,
       dataIndex: column.key,
       className: column.className,
-      fixed: isFirstColumn ? "left" : isLastColumn ? "right" : undefined,
+      fixed: fixedColumns ? (isFirstColumn ? "left" : isLastColumn ? "right" : undefined) : undefined,
       render: (_value, row) => column.render(row),
     };
   });
 
   return (
-    <div className={cn("overflow-hidden rounded-[24px] border border-[#e6ebf5]", scrollClassName)}>
+    <div className={cn("overflow-x-auto", scrollClassName)}>
       <Table
+        bordered
         columns={tableColumns}
         dataSource={rows}
         pagination={false}

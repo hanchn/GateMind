@@ -1,8 +1,9 @@
 import { useMemo, useState } from "react";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 
 import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
+import { DataTable } from "@/components/ui/DataTable";
 
 const tableOptions = [
   { key: "project_hub.milestone_snapshots", database: "project_hub", table: "milestone_snapshots", environment: "预发布" },
@@ -14,8 +15,8 @@ const tableOptions = [
 ] as const;
 
 const operationOptions = [
-  { key: "create", label: "增" },
   { key: "read", label: "查" },
+  { key: "create", label: "增" },
   { key: "update", label: "改" },
   { key: "delete", label: "删" },
 ];
@@ -36,7 +37,7 @@ export function ConnectionRequestForm() {
   const [name, setName] = useState("");
   const [tableKeyword, setTableKeyword] = useState("");
   const [selectedItems, setSelectedItems] = useState<Record<string, string[]>>(historicalSelections);
-  const [activeDatabase, setActiveDatabase] = useState("project_hub");
+  const [activeDatabaseKey, setActiveDatabaseKey] = useState("project_hub-预发布");
   const [pickerOpen, setPickerOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [version, setVersion] = useState("v1.0.0");
@@ -44,19 +45,21 @@ export function ConnectionRequestForm() {
   const databases = useMemo(
     () =>
       Object.values(
-        tableOptions.reduce<Record<string, { database: string; environment: string; total: number; selected: number }>>(
+        tableOptions.reduce<Record<string, { key: string; database: string; environment: string; total: number; selected: number }>>(
           (acc, item) => {
-            if (!acc[item.database]) {
-              acc[item.database] = {
+            const databaseKey = `${item.database}-${item.environment}`;
+            if (!acc[databaseKey]) {
+              acc[databaseKey] = {
+                key: databaseKey,
                 database: item.database,
                 environment: item.environment,
                 total: 0,
                 selected: 0,
               };
             }
-            acc[item.database].total += 1;
+            acc[databaseKey].total += 1;
             if (selectedItems[item.key]?.length) {
-              acc[item.database].selected += 1;
+              acc[databaseKey].selected += 1;
             }
             return acc;
           },
@@ -69,15 +72,16 @@ export function ConnectionRequestForm() {
     () =>
       tableOptions.filter(
         (item) =>
-          item.database === activeDatabase &&
+          `${item.database}-${item.environment}` === activeDatabaseKey &&
           `${item.database}.${item.table}`.toLowerCase().includes(tableKeyword.toLowerCase()),
       ),
-    [activeDatabase, tableKeyword],
+    [activeDatabaseKey, tableKeyword],
   );
   const selectedTableItems = tableOptions.filter((item) => selectedItems[item.key]);
+  const activeDatabase = databases.find((database) => database.key === activeDatabaseKey);
 
   return (
-    <SectionCard title="发布申请">
+    <SectionCard>
       <div className="space-y-4">
         <label className="block text-sm text-ink-muted">
           应用 / 功能名称
@@ -89,15 +93,42 @@ export function ConnectionRequestForm() {
           />
         </label>
         <div className="space-y-3">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <p className="text-sm text-ink-muted">库表选择</p>
-              <HelpTooltip content="支持多库多表申请，历史已选会默认带出。" />
-            </div>
-            <Button onClick={() => setPickerOpen(true)}>
-              选择库表
-            </Button>
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-ink-muted">库列表</p>
+            <HelpTooltip content="点击库列表中的选择，进入表列表弹窗，再勾选增删改查。" />
           </div>
+          <DataTable
+            rowKey={(database) => database.key}
+            rows={databases}
+            columns={[
+              {
+                key: "database",
+                title: "库名",
+                render: (database) => (
+                  <div>
+                    <p className="font-semibold text-ink">{database.database}</p>
+                    <p className="mt-1 text-xs text-ink-muted">{database.environment}</p>
+                  </div>
+                ),
+              },
+              { key: "total", title: "表数", render: (database) => database.total },
+              { key: "selected", title: "已选", render: (database) => database.selected },
+              {
+                key: "actions",
+                title: "操作",
+                render: (database) => (
+                  <Button
+                    onClick={() => {
+                      setActiveDatabaseKey(database.key);
+                      setPickerOpen(true);
+                    }}
+                  >
+                    选择
+                  </Button>
+                ),
+              },
+            ]}
+          />
           <div className="text-sm text-ink-muted">当前已选 {selectedTableItems.length} 张表。</div>
         </div>
         <div className="space-y-3">
@@ -107,14 +138,14 @@ export function ConnectionRequestForm() {
           </div>
           <div className="mt-3 max-h-[260px] space-y-2 overflow-auto pr-1">
             {selectedTableItems.length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-white/10 px-4 py-3 text-sm text-ink-muted">
+              <p className="border border-dashed border-white/10 px-4 py-3 text-sm text-ink-muted">
                 暂无已选库表
               </p>
             ) : (
               selectedTableItems.map((item) => (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3"
+                  className="flex items-center justify-between gap-4 border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3"
                 >
                   <div>
                     <p className="font-semibold text-ink">{item.database}.{item.table}</p>
@@ -186,123 +217,100 @@ export function ConnectionRequestForm() {
         <div className="text-xs text-ink-muted">
           已选 {selectedTableItems.length} 张表，下一版本 {bumpVersion(version)}
         </div>
-        {message && <p className="text-sm text-cyan-200">{message}</p>}
+        {message && <p className="text-sm text-[#1677ff]">{message}</p>}
       </div>
-      {pickerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 px-6">
-          <div className="max-h-[80vh] w-full max-w-6xl rounded-[2rem] border border-[#e6ebf5] bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
-            <div className="flex items-center justify-between gap-4">
-              <div className="flex items-center gap-2">
-                <h3 className="font-display text-2xl text-ink">选择库表</h3>
-                <HelpTooltip content="选择库后，在右侧表上直接勾选增删改查。" />
-              </div>
-              <Button onClick={() => setPickerOpen(false)}>
-                完成
-              </Button>
-            </div>
-            <div className="mt-6 grid gap-4 xl:grid-cols-[0.42fr_1fr]">
-              <div className="min-h-0">
-                <div className="max-h-[460px] space-y-2 overflow-auto pr-1">
-                  {databases.map((database) => (
-                    <Button
-                      key={database.database}
-                      block
-                      className="!h-auto !py-3 text-left"
-                      onClick={() => setActiveDatabase(database.database)}
-                    >
-                      <p className="font-semibold text-ink">{database.database}</p>
-                      <p className="mt-1 text-xs text-ink-muted">
-                        环境：{database.environment} | 表数：{database.total}
-                      </p>
-                      <p className="mt-2 text-xs text-cyan-200">已选表：{database.selected}</p>
-                    </Button>
-                  ))}
+      <Modal
+        title={activeDatabase ? `${activeDatabase.database} / ${activeDatabase.environment} 表列表` : "表列表"}
+        open={pickerOpen}
+        onCancel={() => setPickerOpen(false)}
+        width={980}
+        footer={[
+          <Button key="close" onClick={() => setPickerOpen(false)}>
+            完成
+          </Button>,
+        ]}
+      >
+        <label className="block text-sm text-ink-muted">
+          搜索当前库下的表
+          <input
+            value={tableKeyword}
+            onChange={(event) => setTableKeyword(event.target.value)}
+            placeholder={`输入 ${activeDatabase?.database ?? ""} 下的表名`}
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+          />
+        </label>
+        <div className="mt-4 max-h-[520px] space-y-2 overflow-auto pr-1">
+          {filteredTables.map((table) => {
+            const currentOperations = selectedItems[table.key] ?? [];
+
+            return (
+              <div key={table.key} className="rounded-2xl border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3">
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-semibold text-ink">{table.table}</p>
+                    <p className="mt-1 text-xs text-ink-muted">
+                      环境：{table.environment}
+                      {historicalSelections[table.key] ? " | 历史已选" : ""}
+                    </p>
+                  </div>
+                  {currentOperations.length > 0 && (
+                    <span className="rounded-full border border-[#91caff] bg-[#e6f4ff] px-2.5 py-1 text-xs text-[#1677ff]">
+                      已选中
+                    </span>
+                  )}
                 </div>
-              </div>
-              <div className="min-h-0">
-                <label className="block text-sm text-ink-muted">
-                  搜索当前库下的表
-                  <input
-                    value={tableKeyword}
-                    onChange={(event) => setTableKeyword(event.target.value)}
-                    placeholder={`输入 ${activeDatabase} 下的表名`}
-                    className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
-                  />
-                </label>
-                <div className="mt-3 max-h-[396px] space-y-2 overflow-auto pr-1">
-                  {filteredTables.map((table) => {
-                    const currentOperations = selectedItems[table.key] ?? [];
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {operationOptions.map((option) => {
+                    const checked = currentOperations.includes(option.key);
 
                     return (
-                      <div key={table.key} className="rounded-2xl border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3">
-                        <div className="flex items-start justify-between gap-4">
-                          <div>
-                            <p className="font-semibold text-ink">{table.table}</p>
-                            <p className="mt-1 text-xs text-ink-muted">
-                              环境：{table.environment}
-                              {historicalSelections[table.key] ? " | 历史已选" : ""}
-                            </p>
-                          </div>
-                          {currentOperations.length > 0 && (
-                            <span className="rounded-full border border-cyan-400/30 bg-cyan-500/10 px-2.5 py-1 text-xs text-cyan-100">
-                              已选中
-                            </span>
-                          )}
-                        </div>
-                        <div className="mt-3 grid gap-2 md:grid-cols-4">
-                          {operationOptions.map((option) => {
-                            const checked = currentOperations.includes(option.key);
+                      <label
+                        key={option.key}
+                        className={`inline-flex cursor-pointer items-center justify-center rounded-full border px-3 py-1 text-xs font-medium transition ${
+                          checked
+                            ? "border-[#91caff] bg-[#e6f4ff] text-[#1677ff]"
+                            : "border-[#d9e1ec] bg-white text-[#64748b] hover:border-[#91caff] hover:text-[#1677ff]"
+                        }`}
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={(event) => {
+                            const nextChecked = event.target.checked;
+                            setSelectedItems((prev) => {
+                              const current = prev[table.key] ?? [];
+                              if (nextChecked) {
+                                return {
+                                  ...prev,
+                                  [table.key]: current.includes(option.key) ? current : [...current, option.key],
+                                };
+                              }
 
-                            return (
-                              <label
-                                key={option.key}
-                                className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition ${
-                                  checked ? "bg-[#e6f4ff] text-[#1677ff]" : "bg-white text-[#64748b]"
-                                }`}
-                              >
-                                <input
-                                  type="checkbox"
-                                  checked={checked}
-                                  onChange={(event) => {
-                                    const nextChecked = event.target.checked;
-                                    setSelectedItems((prev) => {
-                                      const current = prev[table.key] ?? [];
-                                      if (nextChecked) {
-                                        return {
-                                          ...prev,
-                                          [table.key]: current.includes(option.key) ? current : [...current, option.key],
-                                        };
-                                      }
+                              const nextOperations = current.filter((item) => item !== option.key);
+                              if (nextOperations.length === 0) {
+                                const next = { ...prev };
+                                delete next[table.key];
+                                return next;
+                              }
 
-                                      const nextOperations = current.filter((item) => item !== option.key);
-                                      if (nextOperations.length === 0) {
-                                        const next = { ...prev };
-                                        delete next[table.key];
-                                        return next;
-                                      }
-
-                                      return {
-                                        ...prev,
-                                        [table.key]: nextOperations,
-                                      };
-                                    });
-                                  }}
-                                  className="h-4 w-4 rounded border-white/20 bg-transparent"
-                                />
-                                <span>{option.label}</span>
-                              </label>
-                            );
-                          })}
-                        </div>
-                      </div>
+                              return {
+                                ...prev,
+                                [table.key]: nextOperations,
+                              };
+                            });
+                          }}
+                          className="sr-only"
+                        />
+                        <span>{option.label}</span>
+                      </label>
                     );
                   })}
                 </div>
               </div>
-            </div>
-          </div>
+            );
+          })}
         </div>
-      ) : null}
+      </Modal>
     </SectionCard>
   );
 }

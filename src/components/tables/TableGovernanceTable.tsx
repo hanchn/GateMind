@@ -1,3 +1,5 @@
+import { Button } from "antd";
+
 import { DataTable } from "@/components/ui/DataTable";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { TableGovernanceItem } from "@/types";
@@ -6,9 +8,11 @@ interface TableGovernanceTableProps {
   databaseName?: string;
   items: TableGovernanceItem[];
   onSelect: (item: TableGovernanceItem) => void;
+  onView: (item: TableGovernanceItem) => void;
+  onEdit: (item: TableGovernanceItem) => void;
 }
 
-export function TableGovernanceTable({ databaseName, items, onSelect }: TableGovernanceTableProps) {
+export function TableGovernanceTable({ databaseName, items, onSelect, onView, onEdit }: TableGovernanceTableProps) {
   return (
     <DataTable
       rowKey={(item) => item.id}
@@ -34,6 +38,32 @@ export function TableGovernanceTable({ databaseName, items, onSelect }: TableGov
         { key: "rows", title: "预估行数", render: (item) => item.estimatedRows },
         { key: "sensitivity", title: "敏感级别", render: (item) => item.sensitivity },
         { key: "status", title: "纳管状态", render: (item) => <StatusBadge status={item.status} /> },
+        {
+          key: "actions",
+          title: "操作",
+          render: (item) => (
+            <div className="flex items-center gap-2">
+              <Button
+                type="link"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onEdit(item);
+                }}
+              >
+                编辑
+              </Button>
+              <Button
+                type="link"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onView(item);
+                }}
+              >
+                查看
+              </Button>
+            </div>
+          ),
+        },
       ]}
     />
   );

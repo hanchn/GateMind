@@ -13,10 +13,12 @@ export function SettingsPage() {
         >
           <div>
             <label className="block text-sm text-ink-muted">
-              默认频率限制
+              每分钟请求上限
               <input
-                defaultValue="1 分钟最多请求 60 次"
-                className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+                type="number"
+                min="1"
+                defaultValue="60"
+                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
               />
             </label>
           </div>
@@ -27,12 +29,32 @@ export function SettingsPage() {
             <HelpTooltip content="用于约束默认返回条数、分页上限和最大导出量，避免 AI 一次性请求过大数据集。" />
           }
         >
-          <div>
+          <div className="grid gap-4">
             <label className="block text-sm text-ink-muted">
-              默认数据窗口
+              默认返回条数
               <input
-                defaultValue="默认 50 行，最大 500 行"
-                className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+                type="number"
+                min="1"
+                defaultValue="50"
+                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+              />
+            </label>
+            <label className="block text-sm text-ink-muted">
+              分页上限
+              <input
+                type="number"
+                min="1"
+                defaultValue="500"
+                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+              />
+            </label>
+            <label className="block text-sm text-ink-muted">
+              最大导出量
+              <input
+                type="number"
+                min="1"
+                defaultValue="1000"
+                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
               />
             </label>
           </div>

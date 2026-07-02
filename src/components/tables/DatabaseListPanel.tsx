@@ -78,7 +78,7 @@ export function DatabaseListPanel({
                     onViewTables(database.key);
                   }}
                 >
-                  查看表列表
+                  查看子表
                 </Button>
               </div>
             ),

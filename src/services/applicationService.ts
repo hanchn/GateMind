@@ -29,8 +29,15 @@ export async function listApplications() {
   return Promise.resolve([...applications]);
 }
 
+export async function getApplicationById(applicationId: string) {
+  const item = applications.find((application) => application.id === applicationId);
+  return Promise.resolve(item ? { ...item } : null);
+}
+
 export async function createApplication(input: {
   name: string;
+  description: string;
+  integrationDoc: string;
   domain: string;
   owner: string;
 }) {
@@ -41,14 +48,33 @@ export async function createApplication(input: {
   const nextApplication: ApplicationCredential = {
     id: `app-${applications.length + 1}`,
     name: input.name,
+    description: input.description,
+    integrationDoc: input.integrationDoc,
     domain: input.domain,
     owner: input.owner,
     appId: `gm_app_${normalizedName}_${applications.length + 1}`,
     appSecret: `gm_sec_${normalizedName}_${timestamp.compact}_${suffix}`,
     status: "active",
-    createdAt: timestamp.display,
+    updatedAt: timestamp.display,
+    tablePermissions: {},
   };
 
   applications.unshift(nextApplication);
   return Promise.resolve(nextApplication);
+}
+
+export async function updateApplication(
+  applicationId: string,
+  updates: Pick<ApplicationCredential, "name" | "description" | "integrationDoc" | "domain" | "owner" | "tablePermissions">,
+) {
+  const target = applications.find((application) => application.id === applicationId);
+  if (!target) {
+    return Promise.resolve(null);
+  }
+
+  Object.assign(target, updates, {
+    updatedAt: formatNow().display,
+  });
+
+  return Promise.resolve({ ...target });
 }

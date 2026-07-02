@@ -15,7 +15,7 @@ export function SectionCard({ title, action, className, children }: SectionCardP
   return (
     <Card
       className={cn(
-        "rounded-[24px] border border-[#e6ebf5] bg-white shadow-[0_12px_30px_rgba(15,23,42,0.05)]",
+        "border border-[#e6ebf5] bg-white shadow-[0_12px_30px_rgba(15,23,42,0.05)]",
         className,
       )}
       styles={{ body: { padding: 24 } }}

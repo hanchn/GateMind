@@ -34,8 +34,22 @@ body {
 }
 
 button,
-input {
+input,
+textarea,
+select {
   font: inherit;
+}
+
+input,
+textarea,
+select,
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-textarea,
+.ant-input-textarea textarea,
+.ant-picker,
+.ant-select-selector {
+  border-radius: 0 !important;
 }
 
 ::selection {
@@ -44,11 +58,20 @@ input {
 
 .ant-card,
 .ant-table-wrapper,
+.ant-table,
+.ant-table-container,
 .ant-input,
 .ant-input-affix-wrapper,
 .ant-picker,
-.ant-select-selector {
-  border-radius: 18px !important;
+.ant-select-selector,
+.ant-btn,
+.ant-tag,
+.ant-modal-content,
+.ant-drawer-content,
+.ant-menu-item,
+.ant-tabs-tab,
+.ant-pagination .ant-pagination-item {
+  border-radius: 0 !important;
 }
 
 .ant-menu {
@@ -58,19 +81,4 @@ input {
 .ant-menu-item {
   margin-inline: 0 !important;
   width: 100% !important;
-  border-radius: 14px !important;
-}
-
-.ant-table-wrapper .ant-table-thead > tr > th {
-  background: #f8fafc !important;
-  color: #64748b !important;
-  font-size: 12px !important;
-}
-
-.ant-table-wrapper .ant-table-tbody > tr > td {
-  background: #ffffff !important;
-}
-
-.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
-  background: #f8fbff !important;
 }
