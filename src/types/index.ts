@@ -8,6 +8,7 @@ export type ConnectionStatus = "connected" | "pending" | "failed" | "disabled";
 export type RequestStatus = "pending" | "approved" | "rejected";
 export type GovernanceStatus = "managed" | "draft" | "restricted";
 export type TokenStatus = "active" | "expiring" | "revoked";
+export type AssetEnvironment = "测试" | "预发布" | "生产";
 
 export interface DashboardMetric {
   id: string;
@@ -116,6 +117,7 @@ export interface ConnectionRequest {
 export interface TableGovernanceItem {
   id: string;
   connectionName: string;
+  environment: AssetEnvironment;
   databaseName: string;
   tableName: string;
   fieldCount: number;
