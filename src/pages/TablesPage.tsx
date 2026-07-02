@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { PageHeader } from "@/components/shell/PageHeader";
+import { DatabaseListPanel } from "@/components/tables/DatabaseListPanel";
 import { SectionCard } from "@/components/ui/SectionCard";
 import { TableGovernancePanel } from "@/components/tables/TableGovernancePanel";
 import { TableGovernanceTable } from "@/components/tables/TableGovernanceTable";
@@ -9,14 +10,39 @@ import type { TableGovernanceItem } from "@/types";
 
 export function TablesPage() {
   const [items, setItems] = useState<TableGovernanceItem[]>([]);
+  const [selectedDatabaseName, setSelectedDatabaseName] = useState<string | undefined>(undefined);
   const [selectedItem, setSelectedItem] = useState<TableGovernanceItem | undefined>(undefined);
 
   useEffect(() => {
     listGovernanceTables().then((data) => {
       setItems(data);
+      setSelectedDatabaseName(data[0]?.databaseName);
       setSelectedItem(data[0]);
     });
   }, []);
+
+  const databases = Object.values(
+    items.reduce<Record<string, { databaseName: string; environment: string; connectionName: string; tableCount: number }>>(
+      (acc, item) => {
+        const key = `${item.connectionName}-${item.databaseName}-${item.environment}`;
+        if (!acc[key]) {
+          acc[key] = {
+            databaseName: item.databaseName,
+            environment: item.environment,
+            connectionName: item.connectionName,
+            tableCount: 0,
+          };
+        }
+        acc[key].tableCount += 1;
+        return acc;
+      },
+      {},
+    ),
+  );
+
+  const filteredItems = selectedDatabaseName
+    ? items.filter((item) => item.databaseName === selectedDatabaseName)
+    : items;
 
   return (
     <div className="space-y-8">
@@ -37,11 +63,24 @@ export function TablesPage() {
         <div className="grid gap-4 text-sm leading-7 text-ink-muted lg:grid-cols-3">
           <p>第一步：基于连接扫描数据库和表结构。</p>
           <p>第二步：把库表资产录入 GateMind，形成统一资产清单。</p>
-          <p>第三步：录入完成后，才进入展示、纳管、创建功能和发布审批。</p>
+          <p>第三步：点击某个库后，展示该库下面的所有表，再做维护和发布。</p>
         </div>
       </SectionCard>
-      <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
-        <TableGovernanceTable items={items} onSelect={setSelectedItem} />
+      <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr_0.9fr]">
+        <DatabaseListPanel
+          databases={databases}
+          selectedDatabaseName={selectedDatabaseName}
+          onSelect={(databaseName) => {
+            setSelectedDatabaseName(databaseName);
+            const nextItems = items.filter((item) => item.databaseName === databaseName);
+            setSelectedItem(nextItems[0]);
+          }}
+        />
+        <TableGovernanceTable
+          databaseName={selectedDatabaseName}
+          items={filteredItems}
+          onSelect={setSelectedItem}
+        />
         <TableGovernancePanel item={selectedItem} />
       </div>
     </div>

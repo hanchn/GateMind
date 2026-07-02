@@ -18,7 +18,7 @@ interface DataTableProps<T> {
 
 export function DataTable<T>({ columns, rows, onRowClick, rowKey }: DataTableProps<T>) {
   return (
-    <div className="overflow-hidden rounded-3xl border border-white/10">
+    <div className="overflow-x-auto rounded-3xl border border-white/10">
       <table className="min-w-full divide-y divide-white/10">
         <thead className="bg-white/5">
           <tr>

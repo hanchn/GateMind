@@ -137,8 +137,6 @@ export interface PersonalToken {
   lastUsedAt: string;
   status: TokenStatus;
   maskedValue: string;
-  requestRateLimit: string;
-  dataWindow: string;
 }
 
 export interface DashboardSummary {
