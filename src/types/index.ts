@@ -4,6 +4,10 @@ export type ToolStatus = "active" | "draft" | "disabled";
 export type PolicyEffect = "allow" | "confirm" | "approval_required" | "deny";
 export type ApprovalStatus = "pending" | "approved" | "rejected" | "executed";
 export type DomainHealth = "healthy" | "warning" | "degraded";
+export type ConnectionStatus = "connected" | "pending" | "failed" | "disabled";
+export type RequestStatus = "pending" | "approved" | "rejected";
+export type GovernanceStatus = "managed" | "draft" | "restricted";
+export type TokenStatus = "active" | "expiring" | "revoked";
 
 export interface DashboardMetric {
   id: string;
@@ -81,6 +85,51 @@ export interface DomainSummary {
   health: DomainHealth;
   providerStatus: string;
   description: string;
+}
+
+export interface ConnectionSummary {
+  id: string;
+  name: string;
+  environment: string;
+  driver: string;
+  status: ConnectionStatus;
+  owner: string;
+  databaseCount: number;
+  lastCheckedAt: string;
+  requestSource: string;
+}
+
+export interface ConnectionRequest {
+  id: string;
+  name: string;
+  driver: string;
+  domain: string;
+  requester: string;
+  scope: string;
+  reason: string;
+  status: RequestStatus;
+  createdAt: string;
+}
+
+export interface TableGovernanceItem {
+  id: string;
+  connectionName: string;
+  databaseName: string;
+  tableName: string;
+  sensitivity: string;
+  status: GovernanceStatus;
+  owner: string;
+  operationMode: string;
+}
+
+export interface PersonalToken {
+  id: string;
+  name: string;
+  scope: string;
+  expiresAt: string;
+  lastUsedAt: string;
+  status: TokenStatus;
+  maskedValue: string;
 }
 
 export interface DashboardSummary {
