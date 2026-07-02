@@ -15,11 +15,7 @@ export function PoliciesPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        eyebrow="Policy Engine"
-        title="策略规则与审批模板"
-        description="统一管理调用放行、确认、审批、阻断和脱敏等规则，让治理逻辑保持集中且可审计。"
-      />
+      <PageHeader title="策略规则与审批模板" description="集中管理治理规则与审批模板。" />
       <div className="grid gap-6 xl:grid-cols-[1.25fr_0.75fr]">
         <PolicyTable policies={policies} />
         <PolicyEditorPanel />

@@ -4,9 +4,18 @@ import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import { createPersonalToken } from "@/services/tokenService";
 
+function formatDateInput(date: Date) {
+  return date.toISOString().slice(0, 10);
+}
+
 export function TokenCreatePanel() {
   const [name, setName] = useState("");
-  const [ttl, setTtl] = useState("30 天");
+  const [startDate, setStartDate] = useState(() => formatDateInput(new Date()));
+  const [endDate, setEndDate] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 30);
+    return formatDateInput(date);
+  });
   const [message, setMessage] = useState("");
 
   return (
@@ -24,28 +33,35 @@ export function TokenCreatePanel() {
         <label className="block text-sm text-ink-muted">
           <span className="flex items-center gap-2">
             <span>Token 有效期</span>
-            <HelpTooltip content="可选 1 天到 1 年，不自动续期。" />
+            <HelpTooltip content="可直接选择起止日期，到期后立即失效，不自动续期。" />
           </span>
-          <select
-            value={ttl}
-            onChange={(event) => setTtl(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
-          >
-            <option>1 天</option>
-            <option>7 天</option>
-            <option>30 天</option>
-            <option>90 天</option>
-            <option>180 天</option>
-            <option>1 年</option>
-          </select>
+          <div className="mt-2 grid gap-3 md:grid-cols-2">
+            <input
+              type="date"
+              value={startDate}
+              onChange={(event) => setStartDate(event.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+            />
+            <input
+              type="date"
+              value={endDate}
+              min={startDate}
+              onChange={(event) => setEndDate(event.target.value)}
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+            />
+          </div>
         </label>
         <button
           className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
           onClick={async () => {
+            if (!startDate || !endDate || endDate < startDate) {
+              setMessage("请先选择有效的起止日期");
+              return;
+            }
             const created = await createPersonalToken({
               name: name || "未命名 Token",
               scope: "工具查询、审计查看",
-              expiresAt: ttl,
+              expiresAt: `${startDate} 至 ${endDate}`,
             });
             setMessage(`已创建 ${created.maskedValue}`);
           }}

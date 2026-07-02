@@ -23,11 +23,7 @@ export function ApprovalsPage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader
-        eyebrow="Approval Center"
-        title="高风险变更审批"
-        description="审批人按风险等级、影响范围和回滚方案判断是否允许 AI 继续执行高风险动作。"
-      />
+      <PageHeader title="高风险变更审批" description="审批高风险变更，决定是否继续执行。" />
 
       <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
         <ApprovalTable approvals={approvals} onSelect={(approval) => setSelectedApprovalId(approval.id)} />
