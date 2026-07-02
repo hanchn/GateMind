@@ -103,7 +103,6 @@ export function TableGovernancePanel({ item, onSave }: TableGovernancePanelProps
         </div>
         {isEditing ? (
           <Button
-            type="primary"
             block
             onClick={() => {
               onSave?.(item.id, {

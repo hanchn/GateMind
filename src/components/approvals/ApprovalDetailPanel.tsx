@@ -44,8 +44,8 @@ export function ApprovalDetailPanel({ approval }: ApprovalDetailPanelProps) {
           <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">{approval.rollbackPlan}</p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
-          <Button type="primary">审批通过</Button>
-          <Button danger>驳回变更</Button>
+          <Button>审批通过</Button>
+          <Button>驳回变更</Button>
         </div>
       </div>
     </SectionCard>

@@ -94,7 +94,7 @@ export function ConnectionRequestForm() {
               <p className="text-sm text-ink-muted">库表选择</p>
               <HelpTooltip content="支持多库多表申请，历史已选会默认带出。" />
             </div>
-            <Button type="primary" onClick={() => setPickerOpen(true)}>
+            <Button onClick={() => setPickerOpen(true)}>
               选择库表
             </Button>
           </div>
@@ -166,7 +166,6 @@ export function ConnectionRequestForm() {
             保存草稿
           </Button>
           <Button
-            type="primary"
             onClick={() => {
               if (!reason.trim()) {
                 setMessage("请先填写申请原因");
@@ -207,7 +206,6 @@ export function ConnectionRequestForm() {
                   {databases.map((database) => (
                     <Button
                       key={database.database}
-                      type={activeDatabase === database.database ? "primary" : "default"}
                       block
                       className="!h-auto !py-3 text-left"
                       onClick={() => setActiveDatabase(database.database)}

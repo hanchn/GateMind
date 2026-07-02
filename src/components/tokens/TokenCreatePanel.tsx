@@ -53,7 +53,6 @@ export function TokenCreatePanel() {
           </div>
         </label>
         <Button
-          type="primary"
           block
           onClick={async () => {
             if (!startDate || !endDate || endDate < startDate) {

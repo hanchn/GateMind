@@ -74,7 +74,7 @@ export function TablesPage() {
         action={
           <div className="flex items-center gap-3">
             <HelpTooltip content="先扫描连接下的数据库和表结构，录入后再统一展示和维护。" />
-            <Button type="primary">扫描并录入库表</Button>
+            <Button>扫描并录入库表</Button>
           </div>
         }
       >
@@ -101,7 +101,7 @@ export function TablesPage() {
                 ) : (
                   <Button onClick={() => setIsEditingDatabaseDescription(true)}>编辑库描述</Button>
                 )}
-                <Button type="primary" onClick={() => setShowTableList(true)}>
+                <Button onClick={() => setShowTableList(true)}>
                   查看表列表
                 </Button>
               </div>
@@ -140,7 +140,7 @@ export function TablesPage() {
                 />
               </div>
               {isEditingDatabaseDescription ? (
-                <Button type="primary" onClick={() => setIsEditingDatabaseDescription(false)}>
+                <Button onClick={() => setIsEditingDatabaseDescription(false)}>
                   保存库描述
                 </Button>
               ) : null}
