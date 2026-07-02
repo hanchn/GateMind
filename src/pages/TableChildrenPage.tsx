@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button } from "antd";
+import { Button, Modal } from "antd";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { PageHeader } from "@/components/shell/PageHeader";
@@ -19,6 +19,7 @@ export function TableChildrenPage() {
   const [items, setItems] = useState<TableGovernanceItem[]>([]);
   const [selectedItem, setSelectedItem] = useState<TableGovernanceItem | undefined>(undefined);
   const [panelMode, setPanelMode] = useState<"view" | "edit">("view");
+  const [detailOpen, setDetailOpen] = useState(false);
 
   const databaseKey = searchParams.get("databaseKey") ?? "";
 
@@ -38,6 +39,7 @@ export function TableChildrenPage() {
   useEffect(() => {
     setSelectedItem(filteredItems[0]);
     setPanelMode("view");
+    setDetailOpen(false);
   }, [databaseKey, filteredItems]);
 
   return (
@@ -69,35 +71,42 @@ export function TableChildrenPage() {
           <p className="text-sm text-ink-muted">未找到对应库，请返回库列表重新选择。</p>
         )}
       </SectionCard>
-      <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
-        <SectionCard title="子表列表">
-          <TableGovernanceTable
-            databaseName={selectedDatabase?.databaseName}
-            items={filteredItems}
-            onSelect={(item) => {
-              setSelectedItem(item);
-              setPanelMode("view");
-            }}
-            onView={(item) => {
-              setSelectedItem(item);
-              setPanelMode("view");
-            }}
-            onEdit={(item) => {
-              setSelectedItem(item);
-              setPanelMode("edit");
-            }}
-          />
-        </SectionCard>
+      <SectionCard title="子表列表">
+        <TableGovernanceTable
+          databaseName={selectedDatabase?.databaseName}
+          items={filteredItems}
+          onSelect={setSelectedItem}
+          onView={(item) => {
+            setSelectedItem(item);
+            setPanelMode("view");
+            setDetailOpen(true);
+          }}
+          onEdit={(item) => {
+            setSelectedItem(item);
+            setPanelMode("edit");
+            setDetailOpen(true);
+          }}
+        />
+      </SectionCard>
+      <Modal
+        title={panelMode === "edit" ? "编辑表描述" : "查看表结构"}
+        open={detailOpen}
+        onCancel={() => setDetailOpen(false)}
+        footer={null}
+        width={960}
+      >
         <TableGovernancePanel
           item={selectedItem}
           mode={panelMode}
+          embedded
           onSave={(itemId, updates) => {
             setItems((prev) => prev.map((item) => (item.id === itemId ? { ...item, ...updates } : item)));
             setSelectedItem((prev) => (prev?.id === itemId ? { ...prev, ...updates } : prev));
             setPanelMode("view");
+            setDetailOpen(false);
           }}
         />
-      </div>
+      </Modal>
     </div>
   );
 }
