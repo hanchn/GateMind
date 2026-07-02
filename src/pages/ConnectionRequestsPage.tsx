@@ -16,9 +16,9 @@ export function ConnectionRequestsPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Access Workflow"
-        title="创建连接申请"
-        description="所有新数据库接入都应先提交申请，明确业务域、权限范围、用途说明，再进入审批。"
+        eyebrow="Capability Builder"
+        title="创建功能"
+        description="基于已有连接和库表创建对外功能，明确业务域、执行范围和功能说明，再进入后续治理流程。"
       />
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <ConnectionRequestForm />
