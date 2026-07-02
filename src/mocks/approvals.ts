@@ -1,0 +1,48 @@
+import type { ApprovalItem } from "@/types";
+
+export const approvals: ApprovalItem[] = [
+  {
+    id: "cr-4901",
+    title: "批量调整商品 SEO 标签",
+    requester: "王璇",
+    domain: "商品域",
+    riskLevel: 3,
+    status: "pending",
+    createdAt: "2026-07-02 10:28",
+    impactScope: "182 个商品 SKU",
+    rollbackPlan: "保留原 SEO 快照，可一键恢复",
+  },
+  {
+    id: "cr-4902",
+    title: "更新库存预警阈值",
+    requester: "刘泽",
+    domain: "库存域",
+    riskLevel: 4,
+    status: "pending",
+    createdAt: "2026-07-02 09:53",
+    impactScope: "3 个仓库策略组",
+    rollbackPlan: "恢复上一个策略版本",
+  },
+  {
+    id: "cr-4903",
+    title: "同步项目排期草案",
+    requester: "林楠",
+    domain: "项目域",
+    riskLevel: 3,
+    status: "approved",
+    createdAt: "2026-07-02 08:31",
+    impactScope: "2 条里程碑任务",
+    rollbackPlan: "保留旧排期版本并支持手动恢复",
+  },
+  {
+    id: "cr-4904",
+    title: "删除过期素材权限绑定",
+    requester: "赵博",
+    domain: "权限域",
+    riskLevel: 4,
+    status: "rejected",
+    createdAt: "2026-07-01 18:06",
+    impactScope: "37 个权限条目",
+    rollbackPlan: "执行前生成权限快照",
+  },
+];
