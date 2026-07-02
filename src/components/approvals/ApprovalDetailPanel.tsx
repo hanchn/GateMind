@@ -1,3 +1,5 @@
+import { Button } from "antd";
+
 import { RiskBadge } from "@/components/ui/RiskBadge";
 import { SectionCard } from "@/components/ui/SectionCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
@@ -42,12 +44,8 @@ export function ApprovalDetailPanel({ approval }: ApprovalDetailPanelProps) {
           <p className="mt-2 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink">{approval.rollbackPlan}</p>
         </div>
         <div className="grid gap-3 md:grid-cols-2">
-          <button className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
-            审批通过
-          </button>
-          <button className="rounded-2xl border border-rose-400/30 bg-rose-500/10 px-4 py-3 text-sm text-rose-100 transition hover:bg-rose-500/20">
-            驳回变更
-          </button>
+          <Button type="primary">审批通过</Button>
+          <Button danger>驳回变更</Button>
         </div>
       </div>
     </SectionCard>

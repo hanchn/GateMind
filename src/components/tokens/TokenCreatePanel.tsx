@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "antd";
 
 import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
@@ -51,8 +52,9 @@ export function TokenCreatePanel() {
             />
           </div>
         </label>
-        <button
-          className="w-full rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
+        <Button
+          type="primary"
+          block
           onClick={async () => {
             if (!startDate || !endDate || endDate < startDate) {
               setMessage("请先选择有效的起止日期");
@@ -67,7 +69,7 @@ export function TokenCreatePanel() {
           }}
         >
           创建 Token
-        </button>
+        </Button>
         {message && <p className="text-sm text-cyan-200">{message}</p>}
       </div>
     </SectionCard>

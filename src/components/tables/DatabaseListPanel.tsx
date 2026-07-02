@@ -1,3 +1,5 @@
+import { Button } from "antd";
+
 import { SectionCard } from "@/components/ui/SectionCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import type { TableGovernanceItem } from "@/types";
@@ -22,9 +24,11 @@ export function DatabaseListPanel({
     <SectionCard title="库列表" eyebrow="Database Assets">
       <div className="max-h-[620px] space-y-3 overflow-auto pr-1">
         {databases.map((database) => (
-          <button
+          <Button
             key={`${database.connectionName}-${database.databaseName}-${database.environment}`}
-            className="w-full rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-left transition hover:bg-white/[0.05]"
+            type={selectedDatabaseName === database.databaseName ? "primary" : "default"}
+            block
+            className="!h-auto !py-4 text-left"
             onClick={() => onSelect(database.databaseName)}
           >
             <div className="flex items-center justify-between gap-3">
@@ -38,7 +42,7 @@ export function DatabaseListPanel({
               <span>环境：{database.environment}</span>
               <span>表数：{database.tableCount}</span>
             </div>
-          </button>
+          </Button>
         ))}
       </div>
     </SectionCard>

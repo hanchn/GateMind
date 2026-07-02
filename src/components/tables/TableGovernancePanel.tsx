@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "antd";
 
 import { SectionCard } from "@/components/ui/SectionCard";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
@@ -90,9 +91,9 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
           <p className="mt-2 text-ink">{item.operationMode}</p>
         </div>
-        <button className="w-full rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]">
+        <Button type="primary" block>
           保存库表维护
-        </button>
+        </Button>
       </div>
     </SectionCard>
   );

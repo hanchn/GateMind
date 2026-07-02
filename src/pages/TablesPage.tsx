@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "antd";
 
 import { PageHeader } from "@/components/shell/PageHeader";
 import { DatabaseListPanel } from "@/components/tables/DatabaseListPanel";
@@ -53,9 +54,7 @@ export function TablesPage() {
         action={
           <div className="flex items-center gap-3">
             <HelpTooltip content="先扫描连接下的数据库和表结构，录入后再统一展示和维护。" />
-            <button className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
-              扫描并录入库表
-            </button>
+            <Button type="primary">扫描并录入库表</Button>
           </div>
         }
       >
