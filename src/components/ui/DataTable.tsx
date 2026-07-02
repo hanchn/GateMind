@@ -24,26 +24,26 @@ export function DataTable<T>({
   onRowClick,
   rowKey,
   scrollClassName,
-  stickyHeader = false,
+  stickyHeader = true,
 }: DataTableProps<T>) {
   return (
     <div className="rounded-3xl border border-white/10">
-      <div className={cn("overflow-x-auto", scrollClassName)}>
+      <div className={cn("max-h-[620px] overflow-auto", scrollClassName)}>
         <table className="min-w-full divide-y divide-white/10">
           <thead className={cn("bg-white/5", stickyHeader ? "sticky top-0 z-10 backdrop-blur-xl" : "")}>
-          <tr>
-            {columns.map((column) => (
-              <th
-                key={column.key}
-                className={cn(
-                  "px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-muted",
-                  column.className,
-                )}
-              >
-                {column.title}
-              </th>
-            ))}
-          </tr>
+            <tr>
+              {columns.map((column) => (
+                <th
+                  key={column.key}
+                  className={cn(
+                    "px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-muted",
+                    column.className,
+                  )}
+                >
+                  {column.title}
+                </th>
+              ))}
+            </tr>
           </thead>
           <tbody className="divide-y divide-white/10 bg-surface/60">
             {rows.map((row) => (
