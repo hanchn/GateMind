@@ -1,5 +1,7 @@
 import type { PropsWithChildren, ReactNode } from "react";
 
+import { Card, Typography } from "antd";
+
 import { cn } from "@/lib/utils";
 
 interface SectionCardProps extends PropsWithChildren {
@@ -11,21 +13,26 @@ interface SectionCardProps extends PropsWithChildren {
 
 export function SectionCard({ title, action, className, children }: SectionCardProps) {
   return (
-    <section
+    <Card
       className={cn(
-        "rounded-3xl border border-white/10 bg-panel/80 p-6 shadow-panel backdrop-blur-xl",
+        "rounded-[24px] border border-[#e6ebf5] bg-white shadow-[0_12px_30px_rgba(15,23,42,0.05)]",
         className,
       )}
+      styles={{ body: { padding: 24 } }}
     >
       {(title || action) && (
         <header className="mb-5 flex items-start justify-between gap-4">
           <div>
-            {title && <h2 className="font-display text-2xl text-ink">{title}</h2>}
+            {title && (
+              <Typography.Title level={4} className="!mb-0 !font-[Manrope] !text-[#0f172a]">
+                {title}
+              </Typography.Title>
+            )}
           </div>
           {action}
         </header>
       )}
       {children}
-    </section>
+    </Card>
   );
 }

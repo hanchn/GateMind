@@ -14,12 +14,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: var(--ink);
-  background:
-    radial-gradient(circle at top left, rgba(34, 211, 238, 0.16), transparent 30%),
-    radial-gradient(circle at 80% 10%, rgba(251, 146, 60, 0.12), transparent 25%),
-    linear-gradient(180deg, #060a17 0%, #040711 100%);
-  background-color: var(--app-bg);
+  color: #0f172a;
+  background: #f5f7fb;
 }
 
 * {
@@ -34,6 +30,7 @@ body,
 
 body {
   margin: 0;
+  background: #f5f7fb;
 }
 
 button,
@@ -42,5 +39,38 @@ input {
 }
 
 ::selection {
-  background: rgba(34, 211, 238, 0.22);
+  background: rgba(22, 119, 255, 0.18);
+}
+
+.ant-card,
+.ant-table-wrapper,
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-picker,
+.ant-select-selector {
+  border-radius: 18px !important;
+}
+
+.ant-menu {
+  background: transparent !important;
+}
+
+.ant-menu-item {
+  margin-inline: 0 !important;
+  width: 100% !important;
+  border-radius: 14px !important;
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  background: #f8fafc !important;
+  color: #64748b !important;
+  font-size: 12px !important;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr > td {
+  background: #ffffff !important;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #f8fbff !important;
 }

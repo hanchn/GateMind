@@ -27,7 +27,7 @@ export function TokenCreatePanel() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="例如：CLI 本地调试"
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
           />
         </label>
         <label className="block text-sm text-ink-muted">
@@ -40,19 +40,19 @@ export function TokenCreatePanel() {
               type="date"
               value={startDate}
               onChange={(event) => setStartDate(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+              className="w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
             />
             <input
               type="date"
               value={endDate}
               min={startDate}
               onChange={(event) => setEndDate(event.target.value)}
-              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+              className="w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
             />
           </div>
         </label>
         <button
-          className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
+          className="w-full rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
           onClick={async () => {
             if (!startDate || !endDate || endDate < startDate) {
               setMessage("请先选择有效的起止日期");

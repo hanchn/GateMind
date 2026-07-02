@@ -1,7 +1,6 @@
 import { Shield, Boxes, SlidersHorizontal, ClipboardCheck, ScrollText, Orbit, PlugZap, FileInput, TableProperties, KeyRound, Settings } from "lucide-react";
-import { NavLink } from "react-router-dom";
-
-import { cn } from "@/lib/utils";
+import { Card, Menu, Typography } from "antd";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { to: "/", label: "控制台", icon: Shield },
@@ -18,39 +17,31 @@ const navItems = [
 ];
 
 export function AppSidebar() {
-  return (
-    <aside className="hidden w-72 shrink-0 border-r border-white/10 bg-black/20 px-5 py-6 lg:block">
-      <div className="rounded-3xl border border-white/10 bg-panel px-5 py-6 shadow-panel">
-        <p className="text-xs uppercase tracking-[0.36em] text-cyan-200/70">GateMind</p>
-        <h1 className="mt-3 font-display text-3xl text-ink">企业 AI 治理指挥舱</h1>
-        <p className="mt-3 text-sm leading-6 text-ink-muted">
-          统一管理工具目录、风险策略、审批链路与审计追踪。
-        </p>
-      </div>
+  const location = useLocation();
+  const navigate = useNavigate();
 
-      <nav className="mt-6 space-y-2">
-        {navItems.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.to}
-              to={item.to}
-              end={item.to === "/"}
-              className={({ isActive }) =>
-                cn(
-                  "flex items-center gap-3 rounded-2xl border px-4 py-3 text-sm transition duration-200",
-                  isActive
-                    ? "border-cyan-400/30 bg-cyan-500/10 text-cyan-100 shadow-[0_0_0_1px_rgba(34,211,238,0.15)]"
-                    : "border-white/5 bg-white/[0.03] text-ink-muted hover:border-white/10 hover:bg-white/[0.06] hover:text-ink",
-                )
-              }
-            >
-              <Icon className="h-4 w-4" />
-              <span>{item.label}</span>
-            </NavLink>
-          );
-        })}
-      </nav>
+  return (
+    <aside className="hidden w-72 shrink-0 py-4 lg:block">
+      <Card className="rounded-[28px] border border-[#e6ebf5] shadow-[0_16px_40px_rgba(15,23,42,0.06)]" styles={{ body: { padding: 20 } }}>
+        <Typography.Text className="!text-xs !font-semibold !uppercase !tracking-[0.3em] !text-[#1677ff]">GateMind</Typography.Text>
+        <Typography.Title level={3} className="!mt-3 !mb-2 !font-[Manrope] !text-[#0f172a]">
+          企业 AI 治理指挥舱
+        </Typography.Title>
+
+        <Menu
+          className="mt-6 border-0"
+          selectedKeys={[location.pathname]}
+          onClick={({ key }) => navigate(key)}
+          items={navItems.map((item) => {
+            const Icon = item.icon;
+            return {
+              key: item.to,
+              icon: <Icon className="h-4 w-4" />,
+              label: item.label,
+            };
+          })}
+        />
+      </Card>
+    </aside>
     </aside>
   );
-}

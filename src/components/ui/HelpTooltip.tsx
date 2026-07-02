@@ -1,4 +1,5 @@
-import { CircleHelp } from "lucide-react";
+import { QuestionCircleOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 
 interface HelpTooltipProps {
   content: string;
@@ -6,13 +7,10 @@ interface HelpTooltipProps {
 
 export function HelpTooltip({ content }: HelpTooltipProps) {
   return (
-    <span className="group relative inline-flex items-center">
-      <span className="inline-flex h-5 w-5 cursor-help items-center justify-center rounded-full border border-white/10 bg-white/5 text-ink-muted transition hover:bg-white/10 hover:text-ink">
-        <CircleHelp className="h-3.5 w-3.5" />
+    <Tooltip placement="bottom" title={<span className="text-xs leading-6">{content}</span>} overlayInnerStyle={{ maxWidth: 320 }}>
+      <span className="inline-flex h-5 w-5 cursor-help items-center justify-center text-[#94a3b8] transition hover:text-[#1677ff]">
+        <QuestionCircleOutlined />
       </span>
-      <span className="pointer-events-none absolute left-1/2 top-full z-20 mt-2 hidden w-80 -translate-x-1/2 rounded-2xl border border-white/10 bg-[#0b1220] px-4 py-3 text-xs leading-6 text-ink-muted shadow-2xl group-hover:block">
-        {content}
-      </span>
-    </span>
+    </Tooltip>
   );
 }

@@ -16,7 +16,7 @@ export function SettingsPage() {
               默认频率限制
               <input
                 defaultValue="1 分钟最多请求 60 次"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+                className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
               />
             </label>
           </div>
@@ -32,7 +32,7 @@ export function SettingsPage() {
               默认数据窗口
               <input
                 defaultValue="默认 50 行，最大 500 行"
-                className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+                className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
               />
             </label>
           </div>

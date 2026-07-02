@@ -1,4 +1,5 @@
-import { BellDot, Search, Sparkles } from "lucide-react";
+import { BellOutlined, SearchOutlined } from "@ant-design/icons";
+import { Badge, Button, Card, Input, Space, Typography } from "antd";
 
 import { useShellStore } from "@/store/useShellStore";
 
@@ -7,30 +8,34 @@ export function TopStatusBar() {
   const setSearch = useShellStore((state) => state.setSearch);
 
   return (
-    <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-panel/70 px-5 py-4 shadow-panel backdrop-blur-xl lg:flex-row lg:items-center lg:justify-between">
-      <div>
-        <p className="text-xs uppercase tracking-[0.32em] text-ink-muted">Production Governance</p>
-        <div className="mt-2 flex items-center gap-2 text-ink">
-          <Sparkles className="h-4 w-4 text-cyan-300" />
-          <span className="text-sm">当前环境：Local SQLite / Mock Gateway</span>
+    <Card
+      className="rounded-[24px] border border-[#e6ebf5] shadow-[0_12px_30px_rgba(15,23,42,0.05)]"
+      styles={{ body: { padding: 20 } }}
+    >
+      <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <Typography.Text className="!text-xs !font-semibold !uppercase !tracking-[0.28em] !text-[#94a3b8]">
+            Production Governance
+          </Typography.Text>
+          <Typography.Paragraph className="!mt-2 !mb-0 !text-sm !text-[#334155]">
+            当前环境：Local SQLite / Mock Gateway
+          </Typography.Paragraph>
         </div>
-      </div>
 
-      <div className="flex flex-col gap-3 md:flex-row md:items-center">
-        <label className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-ink-muted">
-          <Search className="h-4 w-4" />
-          <input
+        <Space size={12} wrap>
+          <Input
+            allowClear
+            prefix={<SearchOutlined className="text-[#94a3b8]" />}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
             placeholder="搜索工具、策略、Trace"
-            className="w-full bg-transparent text-ink outline-none placeholder:text-ink-muted md:w-64"
+            className="w-full md:w-72"
           />
-        </label>
-        <button className="flex items-center justify-center gap-2 rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-ink transition hover:bg-white/10">
-          <BellDot className="h-4 w-4 text-orange-300" />
-          12 条风控提醒
-        </button>
+          <Badge count={12} size="small">
+            <Button icon={<BellOutlined />}>风控提醒</Button>
+          </Badge>
+        </Space>
       </div>
-    </div>
+    </Card>
   );
 }

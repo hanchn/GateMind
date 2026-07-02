@@ -84,7 +84,7 @@ export function ConnectionRequestForm() {
             value={name}
             onChange={(event) => setName(event.target.value)}
             placeholder="例如：查询项目里程碑状态"
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
           />
         </label>
         <div className="space-y-3">
@@ -95,7 +95,7 @@ export function ConnectionRequestForm() {
             </div>
             <button
               type="button"
-              className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-2 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
+              className="rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-2 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
               onClick={() => setPickerOpen(true)}
             >
               选择库表
@@ -117,7 +117,7 @@ export function ConnectionRequestForm() {
               selectedTableItems.map((item) => (
                 <div
                   key={item.key}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3"
+                  className="flex items-center justify-between gap-4 rounded-2xl border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3"
                 >
                   <div>
                     <p className="font-semibold text-ink">{item.database}.{item.table}</p>
@@ -131,8 +131,8 @@ export function ConnectionRequestForm() {
                           key={option.key}
                           className={`rounded-full px-2.5 py-1 ${
                             enabled
-                              ? "border border-cyan-400/30 bg-cyan-500/10 text-cyan-100"
-                              : "border border-white/10 bg-white/5 text-ink-muted"
+                              ? "bg-[#e6f4ff] text-[#1677ff]"
+                              : "bg-[#f1f5f9] text-[#64748b]"
                           }`}
                         >
                           {option.label}
@@ -152,7 +152,7 @@ export function ConnectionRequestForm() {
             onChange={(event) => setReason(event.target.value)}
             rows={3}
             placeholder="必填，说明为什么要创建这个应用 / 发布这个功能。"
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
           />
         </label>
         <div className="flex items-center justify-between gap-4 px-1 py-1">
@@ -166,13 +166,13 @@ export function ConnectionRequestForm() {
         </div>
         <div className="grid gap-3 md:grid-cols-2">
           <button
-            className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-ink transition hover:bg-white/10"
+            className="rounded-2xl border border-[#d9e1ec] bg-white px-4 py-3 text-sm text-[#0f172a] transition hover:bg-[#f8fafc]"
             onClick={() => setMessage("已保存为草稿功能")}
           >
             保存草稿
           </button>
           <button
-            className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
+            className="rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]"
             onClick={() => {
               if (!reason.trim()) {
                 setMessage("请先填写申请原因");
@@ -196,8 +196,8 @@ export function ConnectionRequestForm() {
         {message && <p className="text-sm text-cyan-200">{message}</p>}
       </div>
       {pickerOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 px-6">
-          <div className="max-h-[80vh] w-full max-w-6xl rounded-[2rem] bg-[#0b1220] p-6 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/25 px-6">
+          <div className="max-h-[80vh] w-full max-w-6xl rounded-[2rem] border border-[#e6ebf5] bg-white p-6 shadow-[0_24px_60px_rgba(15,23,42,0.18)]">
             <div className="flex items-center justify-between gap-4">
               <div className="flex items-center gap-2">
                 <h3 className="font-display text-2xl text-ink">选择库表</h3>
@@ -205,7 +205,7 @@ export function ConnectionRequestForm() {
               </div>
               <button
                 type="button"
-                className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-ink transition hover:bg-white/10"
+                className="rounded-2xl border border-[#d9e1ec] bg-white px-4 py-2 text-sm text-[#0f172a] transition hover:bg-[#f8fafc]"
                 onClick={() => setPickerOpen(false)}
               >
                 完成
@@ -220,8 +220,8 @@ export function ConnectionRequestForm() {
                       type="button"
                       className={`w-full rounded-2xl border px-4 py-3 text-left transition ${
                         activeDatabase === database.database
-                          ? "border-cyan-400/30 bg-cyan-500/10"
-                          : "border-white/10 bg-white/5 hover:bg-white/10"
+                          ? "border-[#91caff] bg-[#e6f4ff]"
+                          : "border-[#e6ebf5] bg-white hover:bg-[#f8fafc]"
                       }`}
                       onClick={() => setActiveDatabase(database.database)}
                     >
@@ -241,7 +241,7 @@ export function ConnectionRequestForm() {
                     value={tableKeyword}
                     onChange={(event) => setTableKeyword(event.target.value)}
                     placeholder={`输入 ${activeDatabase} 下的表名`}
-                    className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
+                    className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
                   />
                 </label>
                 <div className="mt-3 max-h-[396px] space-y-2 overflow-auto pr-1">
@@ -249,7 +249,7 @@ export function ConnectionRequestForm() {
                     const currentOperations = selectedItems[table.key] ?? [];
 
                     return (
-                      <div key={table.key} className="rounded-2xl bg-white/[0.04] px-4 py-3">
+                      <div key={table.key} className="rounded-2xl border border-[#e6ebf5] bg-[#f8fafc] px-4 py-3">
                         <div className="flex items-start justify-between gap-4">
                           <div>
                             <p className="font-semibold text-ink">{table.table}</p>
@@ -272,7 +272,7 @@ export function ConnectionRequestForm() {
                               <label
                                 key={option.key}
                                 className={`flex items-center gap-2 rounded-full px-3 py-2 text-sm transition ${
-                                  checked ? "bg-cyan-500/10 text-cyan-100" : "bg-white/[0.05] text-ink-muted"
+                                  checked ? "bg-[#e6f4ff] text-[#1677ff]" : "bg-white text-[#64748b]"
                                 }`}
                               >
                                 <input

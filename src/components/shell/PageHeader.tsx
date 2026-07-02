@@ -1,3 +1,5 @@
+import { Typography } from "antd";
+
 interface PageHeaderProps {
   eyebrow?: string;
   title: string;
@@ -7,8 +9,14 @@ interface PageHeaderProps {
 export function PageHeader({ title, description }: PageHeaderProps) {
   return (
     <header className="mb-8">
-      <h1 className="font-display text-4xl text-ink">{title}</h1>
-      {description ? <p className="mt-3 max-w-3xl text-sm leading-7 text-ink-muted">{description}</p> : null}
+      <Typography.Title level={2} className="!mb-0 !font-[Manrope] !text-[#0f172a]">
+        {title}
+      </Typography.Title>
+      {description ? (
+        <Typography.Paragraph className="!mt-3 !mb-0 max-w-3xl !text-sm !leading-7 !text-[#64748b]">
+          {description}
+        </Typography.Paragraph>
+      ) : null}
     </header>
   );
 }

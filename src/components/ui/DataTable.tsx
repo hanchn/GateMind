@@ -1,5 +1,7 @@
 import type { ReactNode } from "react";
 
+import { Table } from "antd";
+import type { ColumnsType } from "antd/es/table";
 import { cn } from "@/lib/utils";
 
 interface Column<T> {
@@ -26,45 +28,31 @@ export function DataTable<T>({
   scrollClassName,
   stickyHeader = true,
 }: DataTableProps<T>) {
+  const tableColumns: ColumnsType<T> = columns.map((column) => ({
+    key: column.key,
+    title: column.title,
+    dataIndex: column.key,
+    className: column.className,
+    render: (_value, row) => column.render(row),
+  }));
+
   return (
-    <div className="rounded-3xl border border-white/10">
-      <div className={cn("max-h-[620px] overflow-auto", scrollClassName)}>
-        <table className="min-w-full divide-y divide-white/10">
-          <thead className={cn("bg-white/5", stickyHeader ? "sticky top-0 z-10 backdrop-blur-xl" : "")}>
-            <tr>
-              {columns.map((column) => (
-                <th
-                  key={column.key}
-                  className={cn(
-                    "px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-[0.2em] text-ink-muted",
-                    column.className,
-                  )}
-                >
-                  {column.title}
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-white/10 bg-surface/60">
-            {rows.map((row) => (
-              <tr
-                key={rowKey(row)}
-                className={cn(
-                  "transition duration-200",
-                  onRowClick ? "cursor-pointer hover:bg-white/5" : "",
-                )}
-                onClick={() => onRowClick?.(row)}
-              >
-                {columns.map((column) => (
-                  <td key={column.key} className={cn("px-4 py-4 text-sm text-ink", column.className)}>
-                    {column.render(row)}
-                  </td>
-                ))}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+    <div className={cn("overflow-hidden rounded-[24px] border border-[#e6ebf5]", scrollClassName)}>
+      <Table
+        columns={tableColumns}
+        dataSource={rows}
+        pagination={false}
+        rowKey={rowKey}
+        scroll={{ x: "max-content", y: stickyHeader ? 620 : undefined }}
+        onRow={(row) =>
+          onRowClick
+            ? {
+                onClick: () => onRowClick(row),
+                className: "cursor-pointer",
+              }
+            : {}
+        }
+      />
     </div>
   );
 }
