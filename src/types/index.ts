@@ -97,6 +97,8 @@ export interface ConnectionSummary {
   databaseCount: number;
   lastCheckedAt: string;
   requestSource: string;
+  rateLimit: string;
+  defaultDataWindow: string;
 }
 
 export interface ConnectionRequest {
@@ -130,6 +132,8 @@ export interface PersonalToken {
   lastUsedAt: string;
   status: TokenStatus;
   maskedValue: string;
+  requestRateLimit: string;
+  dataWindow: string;
 }
 
 export interface DashboardSummary {
