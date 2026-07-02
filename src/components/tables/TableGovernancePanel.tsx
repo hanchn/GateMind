@@ -67,7 +67,7 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
             value={draftDescription}
             onChange={(event) => setDraftDescription(event.target.value)}
             rows={4}
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-ink outline-none"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none"
           />
         </div>
         <div>
@@ -78,7 +78,7 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           <select
             value={draftSensitivity}
             onChange={(event) => setDraftSensitivity(event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-ink outline-none"
+            className="mt-2 w-full rounded-2xl border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
           >
             <option>低</option>
             <option>中</option>
@@ -90,7 +90,7 @@ export function TableGovernancePanel({ item }: TableGovernancePanelProps) {
           <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
           <p className="mt-2 text-ink">{item.operationMode}</p>
         </div>
-        <button className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20">
+        <button className="w-full rounded-2xl border border-[#91caff] bg-[#e6f4ff] px-4 py-3 text-sm text-[#1677ff] transition hover:bg-[#d6ebff]">
           保存库表维护
         </button>
       </div>

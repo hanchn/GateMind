@@ -1,8 +1,8 @@
 :root {
-  --app-bg: #050816;
-  --surface: #09111f;
-  --panel: rgba(9, 17, 31, 0.72);
-  --ink: #edf6ff;
-  --ink-muted: #8ca2bf;
-  --grid-line: rgba(255, 255, 255, 0.06);
+  --app-bg: #f5f7fb;
+  --surface: #ffffff;
+  --panel: #ffffff;
+  --ink: #0f172a;
+  --ink-muted: #64748b;
+  --grid-line: rgba(148, 163, 184, 0.14);
 }

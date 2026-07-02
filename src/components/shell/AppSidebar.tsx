@@ -43,5 +43,5 @@ export function AppSidebar() {
         />
       </Card>
     </aside>
-    </aside>
   );
+}
