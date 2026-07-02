@@ -24,7 +24,7 @@ function maskTokenValue(value: string) {
 }
 
 export async function listPersonalTokens() {
-  return Promise.resolve(tokens);
+  return Promise.resolve([...tokens]);
 }
 
 export async function createPersonalToken(input: {
