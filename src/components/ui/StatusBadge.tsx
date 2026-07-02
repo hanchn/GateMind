@@ -15,6 +15,12 @@ const statusToneMap: Record<string, string> = {
   healthy: "border-emerald-400/30 bg-emerald-500/10 text-emerald-200",
   warning: "border-amber-400/30 bg-amber-500/10 text-amber-200",
   degraded: "border-rose-400/30 bg-rose-500/10 text-rose-200",
+  connected: "border-emerald-400/30 bg-emerald-500/10 text-emerald-200",
+  failed: "border-rose-400/30 bg-rose-500/10 text-rose-200",
+  managed: "border-cyan-400/30 bg-cyan-500/10 text-cyan-200",
+  restricted: "border-orange-400/30 bg-orange-500/10 text-orange-200",
+  expiring: "border-amber-400/30 bg-amber-500/10 text-amber-200",
+  revoked: "border-white/15 bg-white/5 text-ink-muted",
 };
 
 export function StatusBadge({ status }: StatusBadgeProps) {
