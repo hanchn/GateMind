@@ -11,7 +11,7 @@ const navItems = [
   { to: "/audit", label: "审计日志", icon: ScrollText },
   { to: "/domains", label: "业务域", icon: Orbit },
   { to: "/connections", label: "数据连接", icon: PlugZap },
-  { to: "/connection-requests", label: "创建功能", icon: FileInput },
+  { to: "/connection-requests", label: "功能发布", icon: FileInput },
   { to: "/tables", label: "库表治理", icon: TableProperties },
   { to: "/tokens", label: "个人 Token", icon: KeyRound },
 ];

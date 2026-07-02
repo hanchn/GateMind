@@ -16,9 +16,9 @@ export function ConnectionRequestsPage() {
   return (
     <div className="space-y-8">
       <PageHeader
-        eyebrow="Capability Builder"
-        title="创建功能"
-        description="基于已有连接和库表创建对外功能，明确业务域、执行范围和功能说明，再进入后续治理流程。"
+        eyebrow="Capability Release"
+        title="功能发布"
+        description="基于已有连接和库表发布对外功能，明确业务域、执行范围、版本号，并在发布时进入审批流程。"
       />
       <div className="grid gap-6 xl:grid-cols-[0.85fr_1.15fr]">
         <ConnectionRequestForm />

@@ -18,6 +18,13 @@ const operationOptions = [
   { key: "delete", label: "删" },
 ];
 
+function bumpVersion(version: string) {
+  const normalized = version.replace(/^v/i, "");
+  const [major = "1", minor = "0", patch = "0"] = normalized.split(".");
+
+  return `v${major}.${minor}.${Number(patch) + 1}`;
+}
+
 export function ConnectionRequestForm() {
   const [name, setName] = useState("");
   const [scope, setScope] = useState("只读");
@@ -25,10 +32,11 @@ export function ConnectionRequestForm() {
   const [selectedTable, setSelectedTable] = useState("project_hub.milestone_snapshots");
   const [operations, setOperations] = useState<string[]>(["read"]);
   const [message, setMessage] = useState("");
+  const [version, setVersion] = useState("v1.0.0");
   const filteredTables = tableOptions.filter((item) => item.toLowerCase().includes(tableKeyword.toLowerCase()));
 
   return (
-    <SectionCard title="创建功能" eyebrow="Create Capability">
+    <SectionCard title="功能发布" eyebrow="Capability Release">
       <div className="space-y-4">
         <label className="block text-sm text-ink-muted">
           功能名称
@@ -115,6 +123,18 @@ export function ConnectionRequestForm() {
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
           />
         </label>
+        <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
+          <p className="text-sm text-ink-muted">版本信息</p>
+          <div className="mt-3 flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <div>
+              <p className="text-xs uppercase tracking-[0.22em] text-ink-muted">当前待发布版本</p>
+              <p className="mt-2 font-display text-2xl text-ink">{version}</p>
+            </div>
+            <p className="max-w-xs text-right text-xs leading-6 text-ink-muted">
+              点击发布时默认自动更新版本号，当前规则为补丁版本 `+1`。
+            </p>
+          </div>
+        </div>
         <div className="grid gap-3 md:grid-cols-2">
           <button
             className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-ink transition hover:bg-white/10"
@@ -124,7 +144,11 @@ export function ConnectionRequestForm() {
           </button>
           <button
             className="rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
-            onClick={() => setMessage("已提交发布，进入审批流程")}
+            onClick={() => {
+              const nextVersion = bumpVersion(version);
+              setVersion(nextVersion);
+              setMessage(`已提交功能发布，版本自动更新为 ${nextVersion}，进入审批流程`);
+            }}
           >
             发布功能
           </button>
