@@ -5,6 +5,7 @@ import { createPersonalToken } from "@/services/tokenService";
 
 export function TokenCreatePanel() {
   const [name, setName] = useState("");
+  const [ttl, setTtl] = useState("30 天");
   const [message, setMessage] = useState("");
 
   return (
@@ -20,28 +21,30 @@ export function TokenCreatePanel() {
           />
         </label>
         <label className="block text-sm text-ink-muted">
-          独立请求频率设置
-          <input
-            defaultValue="1 分钟最多请求 60 次"
+          Token 有效期
+          <select
+            value={ttl}
+            onChange={(event) => setTtl(event.target.value)}
             className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
-          />
+          >
+            <option>1 天</option>
+            <option>7 天</option>
+            <option>30 天</option>
+            <option>90 天</option>
+            <option>180 天</option>
+            <option>1 年</option>
+          </select>
         </label>
-        <label className="block text-sm text-ink-muted">
-          默认数据量请求设置
-          <input
-            defaultValue="默认 50 行，最大 500 行"
-            className="mt-2 w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-ink outline-none"
-          />
-        </label>
+        <p className="rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-xs leading-6 text-ink-muted">
+          Token 不自动续期，达到有效期后立即失效。
+        </p>
         <button
           className="w-full rounded-2xl border border-cyan-400/30 bg-cyan-500/10 px-4 py-3 text-sm text-cyan-100 transition hover:bg-cyan-500/20"
           onClick={async () => {
             const created = await createPersonalToken({
               name: name || "未命名 Token",
               scope: "工具查询、审计查看",
-              expiresAt: "2026-08-01",
-              requestRateLimit: "1 分钟最多请求 60 次",
-              dataWindow: "默认 50 行，最大 500 行",
+              expiresAt: ttl,
             });
             setMessage(`已创建 ${created.maskedValue}`);
           }}

@@ -14,13 +14,23 @@ interface DataTableProps<T> {
   rows: T[];
   onRowClick?: (row: T) => void;
   rowKey: (row: T) => string;
+  scrollClassName?: string;
+  stickyHeader?: boolean;
 }
 
-export function DataTable<T>({ columns, rows, onRowClick, rowKey }: DataTableProps<T>) {
+export function DataTable<T>({
+  columns,
+  rows,
+  onRowClick,
+  rowKey,
+  scrollClassName,
+  stickyHeader = false,
+}: DataTableProps<T>) {
   return (
-    <div className="overflow-x-auto rounded-3xl border border-white/10">
-      <table className="min-w-full divide-y divide-white/10">
-        <thead className="bg-white/5">
+    <div className="rounded-3xl border border-white/10">
+      <div className={cn("overflow-x-auto", scrollClassName)}>
+        <table className="min-w-full divide-y divide-white/10">
+          <thead className={cn("bg-white/5", stickyHeader ? "sticky top-0 z-10 backdrop-blur-xl" : "")}>
           <tr>
             {columns.map((column) => (
               <th
@@ -34,26 +44,27 @@ export function DataTable<T>({ columns, rows, onRowClick, rowKey }: DataTablePro
               </th>
             ))}
           </tr>
-        </thead>
-        <tbody className="divide-y divide-white/10 bg-surface/60">
-          {rows.map((row) => (
-            <tr
-              key={rowKey(row)}
-              className={cn(
-                "transition duration-200",
-                onRowClick ? "cursor-pointer hover:bg-white/5" : "",
-              )}
-              onClick={() => onRowClick?.(row)}
-            >
-              {columns.map((column) => (
-                <td key={column.key} className={cn("px-4 py-4 text-sm text-ink", column.className)}>
-                  {column.render(row)}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-white/10 bg-surface/60">
+            {rows.map((row) => (
+              <tr
+                key={rowKey(row)}
+                className={cn(
+                  "transition duration-200",
+                  onRowClick ? "cursor-pointer hover:bg-white/5" : "",
+                )}
+                onClick={() => onRowClick?.(row)}
+              >
+                {columns.map((column) => (
+                  <td key={column.key} className={cn("px-4 py-4 text-sm text-ink", column.className)}>
+                    {column.render(row)}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

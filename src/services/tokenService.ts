@@ -9,8 +9,6 @@ export async function createPersonalToken(input: {
   name: string;
   scope: string;
   expiresAt: string;
-  requestRateLimit: string;
-  dataWindow: string;
 }) {
   const nextToken: PersonalToken = {
     id: `tok-${tokens.length + 1}`,
@@ -20,8 +18,6 @@ export async function createPersonalToken(input: {
     lastUsedAt: "刚创建",
     status: "active",
     maskedValue: `gtm_usr_****${Math.random().toString(36).slice(-4)}`,
-    requestRateLimit: input.requestRateLimit,
-    dataWindow: input.dataWindow,
   };
 
   tokens.unshift(nextToken);

@@ -23,8 +23,6 @@ export function TokenTable({ items }: TokenTableProps) {
           ),
         },
         { key: "scope", title: "作用范围", render: (item) => item.scope },
-        { key: "limit", title: "独立频率", render: (item) => item.requestRateLimit },
-        { key: "window", title: "默认数据量", render: (item) => item.dataWindow },
         { key: "expiresAt", title: "过期时间", render: (item) => item.expiresAt },
         { key: "status", title: "状态", render: (item) => <StatusBadge status={item.status} /> },
       ]}

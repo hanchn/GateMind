@@ -14,6 +14,8 @@ export function TableGovernanceTable({ databaseName, items, onSelect }: TableGov
       rowKey={(item) => item.id}
       rows={items}
       onRowClick={onSelect}
+      scrollClassName="max-h-[620px] overflow-auto"
+      stickyHeader
       columns={[
         ...(databaseName
           ? []

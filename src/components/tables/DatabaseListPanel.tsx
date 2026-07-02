@@ -20,7 +20,7 @@ export function DatabaseListPanel({
 }: DatabaseListPanelProps) {
   return (
     <SectionCard title="库列表" eyebrow="Database Assets">
-      <div className="space-y-3">
+      <div className="max-h-[620px] space-y-3 overflow-auto pr-1">
         {databases.map((database) => (
           <button
             key={`${database.connectionName}-${database.databaseName}-${database.environment}`}
