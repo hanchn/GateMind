@@ -28,13 +28,19 @@ export function DataTable<T>({
   scrollClassName,
   stickyHeader = true,
 }: DataTableProps<T>) {
-  const tableColumns: ColumnsType<T> = columns.map((column) => ({
-    key: column.key,
-    title: column.title,
-    dataIndex: column.key,
-    className: column.className,
-    render: (_value, row) => column.render(row),
-  }));
+  const tableColumns: ColumnsType<T> = columns.map((column, index) => {
+    const isFirstColumn = index === 0;
+    const isLastColumn = index === columns.length - 1;
+
+    return {
+      key: column.key,
+      title: column.title,
+      dataIndex: column.key,
+      className: column.className,
+      fixed: isFirstColumn ? "left" : isLastColumn ? "right" : undefined,
+      render: (_value, row) => column.render(row),
+    };
+  });
 
   return (
     <div className={cn("overflow-hidden rounded-[24px] border border-[#e6ebf5]", scrollClassName)}>
