@@ -9,6 +9,7 @@ import type { TableGovernanceItem } from "@/types";
 interface TableGovernancePanelProps {
   item?: TableGovernanceItem;
   mode?: "view" | "edit";
+  embedded?: boolean;
   onSave?: (itemId: string, updates: Pick<TableGovernanceItem, "description" | "sensitivity">) => void;
 }
 
@@ -60,7 +61,7 @@ const tableStructures: Record<
   ],
 };
 
-export function TableGovernancePanel({ item, mode = "view", onSave }: TableGovernancePanelProps) {
+export function TableGovernancePanel({ item, mode = "view", embedded = false, onSave }: TableGovernancePanelProps) {
   const [draftDescription, setDraftDescription] = useState(item?.description ?? "");
   const [draftSensitivity, setDraftSensitivity] = useState(item?.sensitivity ?? "中");
   const fields = useMemo(() => (item ? tableStructures[item.tableName] ?? [] : []), [item]);
@@ -71,11 +72,123 @@ export function TableGovernancePanel({ item, mode = "view", onSave }: TableGover
   }, [item]);
 
   if (!item) {
-    return (
-      <SectionCard title="表详情">
-        <p className="text-sm text-ink-muted">点击左侧表列表中的查看或编辑。</p>
-      </SectionCard>
-    );
+    return embedded ? <p className="text-sm text-ink-muted">点击表列表中的查看或编辑。</p> : <SectionCard title="表详情"><p className="text-sm text-ink-muted">点击左侧表列表中的查看或编辑。</p></SectionCard>;
+  }
+
+  const content = (
+    <div className="space-y-4 text-sm text-ink-muted">
+      <div className="flex flex-wrap items-center gap-3">
+        <StatusBadge status={item.status} />
+        <span className="text-sm text-ink-muted">敏感级别：{item.sensitivity}</span>
+      </div>
+      <div className="grid gap-4 md:grid-cols-2">
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">所属库</p>
+          <p className="mt-2 text-ink">{item.databaseName}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
+          <p className="mt-2 text-ink">{item.connectionName}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">环境</p>
+          <p className="mt-2 text-ink">{item.environment}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">负责人</p>
+          <p className="mt-2 text-ink">{item.owner}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">字段数量</p>
+          <p className="mt-2 text-ink">{item.fieldCount}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">预估行数</p>
+          <p className="mt-2 text-ink">{item.estimatedRows}</p>
+        </div>
+        <div>
+          <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
+          <p className="mt-2 text-ink">{item.operationMode}</p>
+        </div>
+      </div>
+      {mode === "edit" ? (
+        <>
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+              <p>库表详细描述</p>
+              <HelpTooltip content="补充表用途、口径和主要字段说明。" />
+            </div>
+            <textarea
+              value={draftDescription}
+              onChange={(event) => setDraftDescription(event.target.value)}
+              rows={4}
+              className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none"
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+              <p>表的敏感级别</p>
+              <HelpTooltip content="用于标记数据敏感程度，影响后续暴露和审批策略。" />
+            </div>
+            <select
+              value={draftSensitivity}
+              onChange={(event) => setDraftSensitivity(event.target.value)}
+              className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
+            >
+              <option>低</option>
+              <option>中</option>
+              <option>高</option>
+              <option>极高</option>
+            </select>
+          </div>
+          <Button
+            block
+            onClick={() => {
+              onSave?.(item.id, {
+                description: draftDescription,
+                sensitivity: draftSensitivity,
+              });
+            }}
+          >
+            保存表维护
+          </Button>
+        </>
+      ) : (
+        <div>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+            <p>表结构</p>
+            <HelpTooltip content="查看当前表的核心字段、类型和字段说明。" />
+          </div>
+          <div className="mt-2 border border-[#e6ebf5]">
+            <div className="grid grid-cols-[1.1fr_1fr_88px_1.4fr] border-b border-[#e6ebf5] bg-[#f8fafc] px-4 py-3 text-xs uppercase tracking-[0.2em] text-ink-muted">
+              <span>字段名</span>
+              <span>类型</span>
+              <span>可空</span>
+              <span>说明</span>
+            </div>
+            {fields.map((field) => (
+              <div key={field.name} className="grid grid-cols-[1.1fr_1fr_88px_1.4fr] border-b border-[#e6ebf5] px-4 py-3 last:border-b-0">
+                <span className="font-semibold text-ink">{field.name}</span>
+                <span className="text-ink">{field.type}</span>
+                <span className="text-ink">{field.nullable}</span>
+                <span className="text-ink">{field.description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+      <div>
+        <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
+          <p>库表详细描述</p>
+          <HelpTooltip content="用于说明表的业务用途和维护口径。" />
+        </div>
+        <p className="mt-2 border border-[#e6ebf5] bg-[#f8fafc] p-4 text-ink">{item.description}</p>
+      </div>
+    </div>
+  );
+
+  if (embedded) {
+    return content;
   }
 
   return (
@@ -87,115 +200,7 @@ export function TableGovernancePanel({ item, mode = "view", onSave }: TableGover
         </div>
       }
     >
-      <div className="space-y-4 text-sm text-ink-muted">
-        <div className="flex flex-wrap items-center gap-3">
-          <StatusBadge status={item.status} />
-          <span className="text-sm text-ink-muted">敏感级别：{item.sensitivity}</span>
-        </div>
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">所属库</p>
-            <p className="mt-2 text-ink">{item.databaseName}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">所属连接</p>
-            <p className="mt-2 text-ink">{item.connectionName}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">环境</p>
-            <p className="mt-2 text-ink">{item.environment}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">负责人</p>
-            <p className="mt-2 text-ink">{item.owner}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">字段数量</p>
-            <p className="mt-2 text-ink">{item.fieldCount}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">预估行数</p>
-            <p className="mt-2 text-ink">{item.estimatedRows}</p>
-          </div>
-          <div>
-            <p className="text-xs uppercase tracking-[0.24em]">可用动作</p>
-            <p className="mt-2 text-ink">{item.operationMode}</p>
-          </div>
-        </div>
-        {mode === "edit" ? (
-          <>
-            <div>
-              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
-                <p>库表详细描述</p>
-                <HelpTooltip content="补充表用途、口径和主要字段说明。" />
-              </div>
-              <textarea
-                value={draftDescription}
-                onChange={(event) => setDraftDescription(event.target.value)}
-                rows={4}
-                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] p-4 text-[#0f172a] outline-none"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
-                <p>表的敏感级别</p>
-                <HelpTooltip content="用于标记数据敏感程度，影响后续暴露和审批策略。" />
-              </div>
-              <select
-                value={draftSensitivity}
-                onChange={(event) => setDraftSensitivity(event.target.value)}
-                className="mt-2 w-full border border-[#d9e1ec] bg-[#f8fafc] px-4 py-3 text-[#0f172a] outline-none"
-              >
-                <option>低</option>
-                <option>中</option>
-                <option>高</option>
-                <option>极高</option>
-              </select>
-            </div>
-            <Button
-              block
-              onClick={() => {
-                onSave?.(item.id, {
-                  description: draftDescription,
-                  sensitivity: draftSensitivity,
-                });
-              }}
-            >
-              保存表维护
-            </Button>
-          </>
-        ) : (
-          <div>
-            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
-              <p>表结构</p>
-              <HelpTooltip content="查看当前表的核心字段、类型和字段说明。" />
-            </div>
-            <div className="mt-2 border border-[#e6ebf5]">
-              <div className="grid grid-cols-[1.1fr_1fr_88px_1.4fr] border-b border-[#e6ebf5] bg-[#f8fafc] px-4 py-3 text-xs uppercase tracking-[0.2em] text-ink-muted">
-                <span>字段名</span>
-                <span>类型</span>
-                <span>可空</span>
-                <span>说明</span>
-              </div>
-              {fields.map((field) => (
-                <div key={field.name} className="grid grid-cols-[1.1fr_1fr_88px_1.4fr] border-b border-[#e6ebf5] px-4 py-3 last:border-b-0">
-                  <span className="font-semibold text-ink">{field.name}</span>
-                  <span className="text-ink">{field.type}</span>
-                  <span className="text-ink">{field.nullable}</span>
-                  <span className="text-ink">{field.description}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-        <div>
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.24em]">
-            <p>库表详细描述</p>
-            <HelpTooltip content="用于说明表的业务用途和维护口径。" />
-          </div>
-          <p className="mt-2 border border-[#e6ebf5] bg-[#f8fafc] p-4 text-ink">{item.description}</p>
-        </div>
-      </div>
+      {content}
     </SectionCard>
   );
 }
