@@ -120,6 +120,7 @@ export interface TableGovernanceItem {
   tableName: string;
   fieldCount: number;
   estimatedRows: string;
+  description: string;
   sensitivity: string;
   status: GovernanceStatus;
   owner: string;
