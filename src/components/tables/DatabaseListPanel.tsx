@@ -13,20 +13,21 @@ interface DatabaseListPanelProps {
     tableCount: number;
   }>;
   selectedDatabaseKey?: string;
-  onSelect: (databaseKey: string) => void;
+  onEditDescription: (databaseKey: string) => void;
+  onViewTables: (databaseKey: string) => void;
 }
 
 export function DatabaseListPanel({
   databases,
   selectedDatabaseKey,
-  onSelect,
+  onEditDescription,
+  onViewTables,
 }: DatabaseListPanelProps) {
   return (
     <SectionCard title="库列表" eyebrow="Database Assets">
       <DataTable
         rowKey={(database) => database.key}
         rows={databases}
-        onRowClick={(database) => onSelect(database.key)}
         scrollClassName="max-h-[620px] overflow-auto"
         columns={[
           {
@@ -60,15 +61,26 @@ export function DatabaseListPanel({
             key: "actions",
             title: "操作",
             render: (database) => (
-              <Button
-                type="link"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onSelect(database.key);
-                }}
-              >
-                查看
-              </Button>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="link"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onEditDescription(database.key);
+                  }}
+                >
+                  编辑库描述
+                </Button>
+                <Button
+                  type="link"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onViewTables(database.key);
+                  }}
+                >
+                  查看表列表
+                </Button>
+              </div>
             ),
           },
         ]}

@@ -66,6 +66,13 @@ export function TablesPage() {
     ? items.filter((item) => getDatabaseKey(item) === selectedDatabase.key)
     : [];
 
+  function openDatabaseDetail(databaseKey: string, options?: { showTables?: boolean; editDescription?: boolean }) {
+    setSelectedDatabaseKey(databaseKey);
+    setSelectedItem(undefined);
+    setShowTableList(Boolean(options?.showTables));
+    setIsEditingDatabaseDescription(Boolean(options?.editDescription));
+  }
+
   function closeDatabaseDetail() {
     setSelectedDatabaseKey(undefined);
     setSelectedItem(undefined);
@@ -90,12 +97,8 @@ export function TablesPage() {
       <DatabaseListPanel
         databases={databases}
         selectedDatabaseKey={selectedDatabaseKey}
-        onSelect={(databaseKey) => {
-          setSelectedDatabaseKey(databaseKey);
-          setSelectedItem(undefined);
-          setShowTableList(false);
-          setIsEditingDatabaseDescription(false);
-        }}
+        onEditDescription={(databaseKey) => openDatabaseDetail(databaseKey, { editDescription: true })}
+        onViewTables={(databaseKey) => openDatabaseDetail(databaseKey, { showTables: true })}
       />
       <Modal
         title={
@@ -127,19 +130,12 @@ export function TablesPage() {
                     <Button key="cancel" onClick={() => setIsEditingDatabaseDescription(false)}>
                       取消
                     </Button>
-                  ) : (
-                    <Button key="edit" onClick={() => setIsEditingDatabaseDescription(true)}>
-                      编辑库描述
-                    </Button>
-                  ),
+                  ) : null,
                   isEditingDatabaseDescription ? (
                     <Button key="save" onClick={() => setIsEditingDatabaseDescription(false)}>
                       保存库描述
                     </Button>
                   ) : null,
-                  <Button key="view-tables" onClick={() => setShowTableList(true)}>
-                    查看表列表
-                  </Button>,
                 ].filter(Boolean)
             : []
         }
